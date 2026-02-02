@@ -25,8 +25,21 @@
 }
 
 @layer base {
+  html {
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+  }
   body {
-    @apply bg-slate-950 text-slate-50 font-sans antialiased selection:bg-indigo-500/30 selection:text-indigo-200 overflow-hidden;
+    @apply bg-slate-950 text-slate-50 font-sans antialiased selection:bg-indigo-500/30 selection:text-indigo-200;
+    overflow-x: hidden;
+    min-height: 100dvh;
+    min-height: 100vh;
+  }
+  @media (max-width: 1023px) {
+    body { overflow-y: auto; }
+  }
+  @media (min-width: 1024px) {
+    body { overflow: hidden; }
   }
 }
 

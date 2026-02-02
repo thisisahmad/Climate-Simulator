@@ -24,7 +24,7 @@ export const SliderControl = ({ label, value, min = 0, max = 100, step = 1, onCh
             </label>
             <span className={`${compact ? 'text-[11px]' : 'text-sm'} font-black text-indigo-400 tabular-nums`}>{Math.round(value)}</span>
         </div>
-        <div className="relative flex items-center h-6">
+        <div className="relative flex items-center min-h-[44px] py-2 sm:py-0 sm:h-6">
             <input
                 type="range"
                 min={min}
@@ -32,7 +32,7 @@ export const SliderControl = ({ label, value, min = 0, max = 100, step = 1, onCh
                 step={step}
                 value={value}
                 onChange={(e) => onChange(parseFloat(e.target.value))}
-                className="w-full cursor-pointer appearance-none bg-transparent"
+                className="w-full cursor-pointer appearance-none bg-transparent touch-none sm:touch-auto"
                 style={{
                     '--value': `${((value - min) / (max - min)) * 100}%`
                 }}
@@ -48,21 +48,21 @@ export const SliderControl = ({ label, value, min = 0, max = 100, step = 1, onCh
         }
         input[type=range]::-webkit-slider-thumb {
             -webkit-appearance: none;
-            height: ${compact ? '14px' : '18px'};
-            width: ${compact ? '14px' : '18px'};
+            height: ${compact ? '20px' : '24px'};
+            width: ${compact ? '20px' : '24px'};
             border-radius: 50%;
             background: white;
             cursor: pointer;
             box-shadow: 0 0 12px rgba(99, 102, 241, 0.6);
-            margin-top: ${compact ? '-4.5px' : '-6.5px'}; 
+            margin-top: ${compact ? '-7.5px' : '-9.5px'}; 
             transition: transform 0.1s;
         }
         input[type=range]::-webkit-slider-thumb:hover {
             transform: scale(1.2);
         }
         input[type=range]::-moz-range-thumb {
-            height: ${compact ? '14px' : '18px'};
-            width: ${compact ? '14px' : '18px'};
+            height: ${compact ? '20px' : '24px'};
+            width: ${compact ? '20px' : '24px'};
             border-radius: 50%;
             background: white;
             cursor: pointer;
@@ -92,16 +92,16 @@ export const ScoreCard = ({ title, score, icon: Icon, isMain = false, color = "b
     }
 
     return (
-        <div className={`glass-card rounded-lg p-5 flex flex-col items-start justify-between h-full relative overflow-hidden group ${getBorder()} ${isMain ? 'bg-indigo-900/10' : 'bg-slate-900/40'}`}>
-            <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-white/5 to-transparent rounded-full -mr-8 -mt-8 pointer-events-none"></div>
+        <div className={`glass-card rounded-lg p-3 sm:p-4 lg:p-5 flex flex-col items-start justify-between min-h-[88px] sm:min-h-[96px] lg:h-full relative overflow-hidden group ${getBorder()} ${isMain ? 'bg-indigo-900/10' : 'bg-slate-900/40'}`}>
+            <div className="absolute top-0 right-0 w-16 h-16 sm:w-24 sm:h-24 bg-gradient-to-br from-white/5 to-transparent rounded-full -mr-6 -mt-6 sm:-mr-8 sm:-mt-8 pointer-events-none"></div>
 
             <div className="flex justify-between w-full items-start z-10">
-                <h3 className={`text-[11px] font-black uppercase tracking-[0.25em] ${isMain ? 'text-indigo-300/80' : 'text-slate-500'}`}>{title}</h3>
-                {Icon && <Icon className={`w-4 h-4 ${isMain ? 'text-indigo-400' : 'text-slate-700'}`} />}
+                <h3 className={`text-[9px] sm:text-[10px] lg:text-[11px] font-black uppercase tracking-[0.15em] sm:tracking-[0.25em] truncate max-w-[70%] ${isMain ? 'text-indigo-300/80' : 'text-slate-500'}`}>{title}</h3>
+                {Icon && <Icon className={`w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0 ${isMain ? 'text-indigo-400' : 'text-slate-700'}`} />}
             </div>
 
             <div className="z-10 mt-auto">
-                <div className={`text-6xl font-black bg-clip-text text-transparent bg-gradient-to-r ${getGradient()} tracking-tighter leading-none`}>
+                <div className={`text-4xl sm:text-5xl lg:text-6xl font-black bg-clip-text text-transparent bg-gradient-to-r ${getGradient()} tracking-tighter leading-none`}>
                     {Math.round(score)}
                 </div>
             </div>
@@ -122,24 +122,24 @@ export const ImpactHeatmap = ({ cells, rows = ['Economic', 'Environmental', 'Str
     };
 
     return (
-        <div className="h-full flex flex-col p-6">
-            <h3 className="text-[12px] font-black text-slate-500 uppercase tracking-[0.25em] mb-8">Impact Matrix</h3>
-            <div className="flex-1 grid grid-cols-4 gap-x-4 gap-y-4">
+        <div className="h-full flex flex-col p-3 sm:p-4 lg:p-6">
+            <h3 className="text-[10px] sm:text-[12px] font-black text-slate-500 uppercase tracking-[0.2em] sm:tracking-[0.25em] mb-4 sm:mb-6 lg:mb-8">Impact Matrix</h3>
+            <div className="flex-1 grid grid-cols-4 gap-x-2 gap-y-2 sm:gap-x-4 sm:gap-y-4 min-w-0">
                 {/* Header IPs */}
                 <div className="col-span-1"></div>
                 {cols.map(c => (
-                    <div key={c} className="flex items-center justify-center font-black text-[10px] uppercase text-slate-600 tracking-[0.2em] text-center">{c}</div>
+                    <div key={c} className="flex items-center justify-center font-black text-[8px] sm:text-[10px] uppercase text-slate-600 tracking-[0.1em] sm:tracking-[0.2em] text-center truncate">{c}</div>
                 ))}
 
                 {/* Rows IPs */}
                 {rows.map(r => (
                     <React.Fragment key={r}>
-                        <div className="flex items-center text-[10px] font-black uppercase text-slate-500 tracking-[0.2em]">{r}</div>
+                        <div className="flex items-center text-[8px] sm:text-[10px] font-black uppercase text-slate-500 tracking-[0.1em] sm:tracking-[0.2em] truncate">{r}</div>
                         {cols.map(c => {
                             const cell = getCell(r, c);
                             return (
-                                <div key={`${r}-${c}`} className={`h-11 rounded-full flex items-center justify-center transition-all hover:scale-[1.05] ${getColorClass(cell?.value, cell?.color)}`}>
-                                    <span className="text-xl font-black tracking-tight">{cell ? Math.round(cell.value) : '-'}</span>
+                                <div key={`${r}-${c}`} className={`h-8 sm:h-10 lg:h-11 rounded-full flex items-center justify-center transition-all hover:scale-[1.05] min-w-0 ${getColorClass(cell?.value, cell?.color)}`}>
+                                    <span className="text-sm sm:text-base lg:text-xl font-black tracking-tight">{cell ? Math.round(cell.value) : '-'}</span>
                                 </div>
                             );
                         })}
@@ -159,13 +159,13 @@ export const RadarPlot = ({ scores }) => {
     ];
 
     return (
-        <div className="h-full w-full flex flex-col">
-            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 w-full text-left">Balance</h3>
-            <div className="flex-1 -ml-4">
+        <div className="h-full w-full flex flex-col min-h-[140px]">
+            <h3 className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 sm:mb-2 w-full text-left">Balance</h3>
+            <div className="flex-1 min-h-[120px] -ml-2 sm:-ml-4">
                 <ResponsiveContainer width="100%" height="100%">
-                    <RadarChart cx="50%" cy="50%" outerRadius="90%" data={data}>
+                    <RadarChart cx="50%" cy="50%" outerRadius="85%" data={data}>
                         <PolarGrid stroke="#334155" />
-                        <PolarAngleAxis dataKey="subject" tick={{ fill: '#94a3b8', fontSize: 11, fontWeight: 800 }} />
+                        <PolarAngleAxis dataKey="subject" tick={{ fill: '#94a3b8', fontSize: 9, fontWeight: 800 }} />
                         <PolarRadiusAxis domain={[0, 100]} tick={false} axisLine={false} />
                         <Radar
                             name="Score"
@@ -207,10 +207,10 @@ export const AlertBox = ({ alerts }) => {
 
     return (
         <div className="h-full flex flex-col overflow-hidden">
-            <h3 className="text-[12px] font-black text-slate-500 uppercase tracking-[0.2em] mb-6 flex items-center gap-3 px-6 pt-6">
-                <AlertTriangle className="h-4 w-4 text-amber-500" /> System Alerts
+            <h3 className="text-[10px] sm:text-[12px] font-black text-slate-500 uppercase tracking-[0.2em] mb-3 sm:mb-6 flex items-center gap-2 sm:gap-3 px-3 sm:px-6 pt-3 sm:pt-6">
+                <AlertTriangle className="h-3 w-3 sm:h-4 sm:w-4 text-amber-500 flex-shrink-0" /> System Alerts
             </h3>
-            <div className="flex-1 overflow-y-auto customized-scrollbar px-6 pb-6">
+            <div className="flex-1 overflow-y-auto customized-scrollbar px-3 sm:px-6 pb-3 sm:pb-6">
                 {alerts.length === 0 ? (
                     <div className="h-full flex flex-col items-center justify-center text-slate-600">
                         <CheckCircle2 className="h-16 w-16 mb-5 opacity-20" />
@@ -220,8 +220,8 @@ export const AlertBox = ({ alerts }) => {
                 ) : (
                     <div className="space-y-4">
                         {alerts.map((alert, idx) => (
-                            <div key={idx} className={`p-5 rounded-xl border border-white/5 border-l-[6px] text-sm shadow-sm ${getSeverityStyles(alert.severity)}`}>
-                                <div className="font-black uppercase mb-1.5 opacity-80 text-[10px] tracking-[0.2em]">{alert.severity} Priority</div>
+                            <div key={idx} className={`p-3 sm:p-5 rounded-xl border border-white/5 border-l-[4px] sm:border-l-[6px] text-xs sm:text-sm shadow-sm ${getSeverityStyles(alert.severity)}`}>
+                                <div className="font-black uppercase mb-1 sm:mb-1.5 opacity-80 text-[9px] sm:text-[10px] tracking-[0.2em]">{alert.severity} Priority</div>
                                 <div className="leading-relaxed font-bold">{alert.message}</div>
                             </div>
                         ))}
@@ -243,22 +243,22 @@ export const DeepMetricsPanel = ({ details }) => {
     if (!details) return null;
 
     const MetricBox = ({ label, value, unit, color }) => (
-        <div className="bg-slate-800/10 rounded-lg p-3 border border-slate-700/30 flex flex-col items-center justify-center text-center group hover:bg-slate-800/40 transition-colors">
-            <span className="text-[8px] uppercase font-black text-slate-600 tracking-[0.2em] mb-1 group-hover:text-slate-500 whitespace-nowrap">{label}</span>
-            <div className={`text-lg font-black ${color || 'text-slate-200'} tabular-nums leading-none`}>
-                {formatMetric(value, unit)}<span className="text-[9px] ml-0.5 font-black opacity-30">{unit}</span>
+        <div className="bg-slate-800/10 rounded-lg p-2 sm:p-3 border border-slate-700/30 flex flex-col items-center justify-center text-center group hover:bg-slate-800/40 transition-colors min-w-0">
+            <span className="text-[7px] sm:text-[8px] uppercase font-black text-slate-600 tracking-[0.15em] sm:tracking-[0.2em] mb-0.5 sm:mb-1 group-hover:text-slate-500 truncate w-full">{label}</span>
+            <div className={`text-sm sm:text-base lg:text-lg font-black ${color || 'text-slate-200'} tabular-nums leading-none`}>
+                {formatMetric(value, unit)}<span className="text-[8px] sm:text-[9px] ml-0.5 font-black opacity-30">{unit}</span>
             </div>
         </div>
     );
 
     return (
-        <div className="h-full flex flex-col p-4 overflow-hidden">
-            <h3 className="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4">Deep Dive Indicators (19)</h3>
+        <div className="h-full flex flex-col p-2 sm:p-4 overflow-hidden">
+            <h3 className="text-[9px] sm:text-[11px] font-black text-slate-500 uppercase tracking-[0.2em] mb-2 sm:mb-4">Deep Dive Indicators (19)</h3>
 
-            <div className="flex-1 overflow-y-auto grid grid-cols-4 gap-4 customized-scrollbar pr-1">
+            <div className="flex-1 overflow-y-auto grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 customized-scrollbar pr-1">
                 {/* Finance (7) */}
                 <div>
-                    <h4 className="text-[9px] font-black text-indigo-400/80 uppercase mb-2 tracking-[0.2em] border-l-4 border-indigo-500/40 pl-2">Finance</h4>
+                    <h4 className="text-[8px] sm:text-[9px] font-black text-indigo-400/80 uppercase mb-1 sm:mb-2 tracking-[0.2em] border-l-4 border-indigo-500/40 pl-2">Finance</h4>
                     <div className="grid grid-cols-1 gap-1.5">
                         <MetricBox label="ROI" value={details.roi_percent} unit="%" color={details.roi_percent > 0 ? "text-emerald-400" : "text-rose-400"} />
                         <MetricBox label="IRR" value={details.irr_percent} unit="%" />
@@ -272,7 +272,7 @@ export const DeepMetricsPanel = ({ details }) => {
 
                 {/* Carbon (4) */}
                 <div>
-                    <h4 className="text-[9px] font-black text-emerald-400/80 uppercase mb-2 tracking-[0.2em] border-l-4 border-emerald-500/40 pl-2">Carbon</h4>
+                    <h4 className="text-[8px] sm:text-[9px] font-black text-emerald-400/80 uppercase mb-1 sm:mb-2 tracking-[0.2em] border-l-4 border-emerald-500/40 pl-2">Carbon</h4>
                     <div className="grid grid-cols-1 gap-1.5">
                         <MetricBox label="Reduction (Proxy)" value={details.carbon_reduction_tons} unit="tCO2e" color="text-emerald-300" />
                         <MetricBox label="Cost/Ton CO2" value={details.cost_per_ton_co2} unit="€" />
@@ -283,7 +283,7 @@ export const DeepMetricsPanel = ({ details }) => {
 
                 {/* Efficiency (4) */}
                 <div>
-                    <h4 className="text-[9px] font-black text-cyan-400/80 uppercase mb-2 tracking-[0.2em] border-l-4 border-cyan-500/40 pl-2">Efficiency</h4>
+                    <h4 className="text-[8px] sm:text-[9px] font-black text-cyan-400/80 uppercase mb-1 sm:mb-2 tracking-[0.2em] border-l-4 border-cyan-500/40 pl-2">Efficiency</h4>
                     <div className="grid grid-cols-1 gap-1.5">
                         <MetricBox label="Energy Savings" value={details.energy_savings_mwh} unit="MWh" />
                         <MetricBox label="Water Savings" value={details.water_savings_kl} unit="KL" />
@@ -294,14 +294,14 @@ export const DeepMetricsPanel = ({ details }) => {
 
                 {/* Risk & ESG (4) */}
                 <div>
-                    <h4 className="text-[9px] font-black text-amber-400/80 uppercase mb-2 tracking-[0.2em] border-l-4 border-amber-500/40 pl-2">Risk & ESG</h4>
+                    <h4 className="text-[8px] sm:text-[9px] font-black text-amber-400/80 uppercase mb-1 sm:mb-2 tracking-[0.2em] border-l-4 border-amber-500/40 pl-2">Risk & ESG</h4>
                     <div className="grid grid-cols-1 gap-1.5">
                         <MetricBox label="ESG Score" value={details.esg_score} unit="/100" />
                         <MetricBox label="Resilience" value={details.resilience_index} unit="Idx" color="text-amber-200" />
                         <MetricBox label="Emp. Engage" value={details.employee_engagement} unit="/100" />
-                        <div className="bg-slate-800/10 rounded-lg p-2.5 border border-slate-700/30 flex flex-col items-center justify-center text-center">
-                            <span className="text-[8px] uppercase font-black text-slate-600 tracking-[0.2em] mb-1">Exec Risk</span>
-                            <div className={`text-[10px] font-black uppercase px-2 py-0.5 rounded ${details.execution_risk_factor === 'High' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/40' : (details.execution_risk_factor === 'Medium' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30')}`}>
+                        <div className="bg-slate-800/10 rounded-lg p-2 sm:p-2.5 border border-slate-700/30 flex flex-col items-center justify-center text-center">
+                            <span className="text-[7px] sm:text-[8px] uppercase font-black text-slate-600 tracking-[0.2em] mb-0.5 sm:mb-1">Exec Risk</span>
+                            <div className={`text-[9px] sm:text-[10px] font-black uppercase px-1.5 sm:px-2 py-0.5 rounded ${details.execution_risk_factor === 'High' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/40' : (details.execution_risk_factor === 'Medium' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30')}`}>
                                 {details.execution_risk_factor}
                             </div>
                         </div>
@@ -314,16 +314,16 @@ export const DeepMetricsPanel = ({ details }) => {
 
 export const NumericInput = ({ label, value, onChange, prefix = "", suffix = "", type = "number", compact = false }) => (
     <div className="group w-full">
-        <label className={`block ${compact ? 'text-[10px]' : 'text-xs'} font-black text-slate-500 uppercase tracking-[0.15em] mb-1.5 group-hover:text-indigo-400 transition-colors`}>
+        <label className={`block ${compact ? 'text-[9px] sm:text-[10px]' : 'text-[10px] sm:text-xs'} font-black text-slate-500 uppercase tracking-[0.15em] mb-1 sm:mb-1.5 group-hover:text-indigo-400 transition-colors`}>
             {label}
         </label>
         <div className="relative">
-            {prefix && <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 font-bold text-[11px]">{prefix}</span>}
+            {prefix && <span className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 text-slate-500 font-bold text-[10px] sm:text-[11px]">{prefix}</span>}
             <input
                 type={type}
                 value={type === "number" ? Math.round(value) : value}
                 onChange={(e) => onChange(type === "number" ? Math.round(parseFloat(e.target.value)) || 0 : e.target.value)}
-                className={`w-full bg-slate-800/40 border border-slate-700/50 rounded-lg ${compact ? 'py-1.5' : 'py-2.5'} ${prefix ? 'pl-7' : 'pl-3'} pr-8 text-[11px] font-bold text-slate-200 outline-none focus:border-indigo-500 transition-all shadow-inner`}
+                className={`w-full bg-slate-800/40 border border-slate-700/50 rounded-lg min-h-[44px] sm:min-h-0 ${compact ? 'py-2 sm:py-1.5' : 'py-2.5'} ${prefix ? 'pl-6 sm:pl-7' : 'pl-3'} pr-7 sm:pr-8 text-[11px] font-bold text-slate-200 outline-none focus:border-indigo-500 transition-all shadow-inner`}
             />
             {suffix && <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 font-bold text-[11px]">{suffix}</span>}
         </div>
@@ -340,24 +340,25 @@ export const ProjectionChart = ({ data, title, dataKeyA, dataKeyB, labelA = "Tra
     };
 
     return (
-        <div className="h-full w-full flex flex-col p-4">
-            <h3 className="text-[12px] font-black text-slate-500 uppercase tracking-[0.25em] mb-4">{title}</h3>
-            <div className="flex-1 w-full">
+        <div className="h-full w-full flex flex-col p-2 sm:p-4 min-h-0">
+            <h3 className="text-[10px] sm:text-[12px] font-black text-slate-500 uppercase tracking-[0.2em] sm:tracking-[0.25em] mb-2 sm:mb-4 flex-shrink-0">{title}</h3>
+            <div className="flex-1 w-full min-h-[180px] sm:min-h-[220px]">
                 <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                    <LineChart data={data} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
                         <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
                         <XAxis
                             dataKey="year"
                             axisLine={false}
                             tickLine={false}
-                            tick={{ fill: '#64748b', fontSize: 10, fontWeight: 700 }}
-                            label={{ value: 'Years', position: 'insideBottom', offset: -5, fill: '#475569', fontSize: 10, fontWeight: 900, textAnchor: 'middle' }}
+                            tick={{ fill: '#64748b', fontSize: 9, fontWeight: 700 }}
+                            label={{ value: 'Years', position: 'insideBottom', offset: -5, fill: '#475569', fontSize: 9, fontWeight: 900, textAnchor: 'middle' }}
                         />
                         <YAxis
                             axisLine={false}
                             tickLine={false}
-                            tick={{ fill: '#64748b', fontSize: 10, fontWeight: 700 }}
+                            tick={{ fill: '#64748b', fontSize: 9, fontWeight: 700 }}
                             tickFormatter={formatYAxis}
+                            width={32}
                         />
                         <Tooltip
                             formatter={(value) => [Math.round(value), ""]}
@@ -371,27 +372,27 @@ export const ProjectionChart = ({ data, title, dataKeyA, dataKeyB, labelA = "Tra
                         />
                         <Legend
                             verticalAlign="top"
-                            height={36}
+                            height={28}
                             iconType="circle"
-                            wrapperStyle={{ fontSize: '10px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em' }}
+                            wrapperStyle={{ fontSize: '9px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em' }}
                         />
                         <Line
                             type="monotone"
                             dataKey={dataKeyA}
                             name={labelA}
                             stroke="#94a3b8"
-                            strokeWidth={3}
-                            dot={{ fill: '#64748b', r: 4 }}
-                            activeDot={{ r: 6, strokeWidth: 0 }}
+                            strokeWidth={2}
+                            dot={{ fill: '#64748b', r: 3 }}
+                            activeDot={{ r: 5, strokeWidth: 0 }}
                         />
                         <Line
                             type="monotone"
                             dataKey={dataKeyB}
                             name={labelB}
                             stroke="#6366f1"
-                            strokeWidth={3}
-                            dot={{ fill: '#4f46e5', r: 4 }}
-                            activeDot={{ r: 6, strokeWidth: 0 }}
+                            strokeWidth={2}
+                            dot={{ fill: '#4f46e5', r: 3 }}
+                            activeDot={{ r: 5, strokeWidth: 0 }}
                             animationDuration={1500}
                         />
                     </LineChart>
