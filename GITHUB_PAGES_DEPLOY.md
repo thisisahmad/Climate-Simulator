@@ -4,7 +4,74 @@ Do these in order. Replace `YOUR_USERNAME` with your GitHub username (e.g. `this
 
 ---
 
-## Part 1: Push your code to GitHub
+## Option A: Deploy from a **different branch** (e.g. `gh-pages` or `live`)
+
+Use this if you want the live site to come from a separate branch (e.g. `gh-pages` or `live`), not `main`.
+
+### 1. Open terminal in the project folder
+
+```powershell
+cd D:\simulator\Climate-Simulator
+```
+
+### 2. Create and switch to the deploy branch
+
+```powershell
+git checkout -b gh-pages
+```
+
+*(You can use another name like `live` or `deploy` instead of `gh-pages`.)*
+
+### 3. Build the site for GitHub Pages
+
+```powershell
+cd frontend
+$env:VITE_BASE_PATH="/Climate-Simulator/"
+npm install
+npm run build
+cd ..
+```
+
+### 4. Copy the built site into `docs/`
+
+```powershell
+if (Test-Path docs) { Remove-Item -Recurse -Force docs }
+New-Item -ItemType Directory -Path docs
+Copy-Item -Path frontend\dist\* -Destination docs -Recurse
+```
+
+### 5. Commit and push the deploy branch
+
+```powershell
+git add -A
+git status
+git commit -m "Build for GitHub Pages (gh-pages branch)"
+git push -u origin gh-pages
+```
+
+*(Use your branch name if different, e.g. `git push -u origin live`.)*
+
+### 6. Turn on GitHub Pages from this branch
+
+1. Go to **https://github.com/YOUR_USERNAME/Climate-Simulator** → **Settings** → **Pages**.
+2. **Source:** **Deploy from a branch**.
+3. **Branch:** choose **gh-pages** (or your branch name).
+4. **Folder:** **/docs**.
+5. Click **Save**.
+
+Your site will be at **https://YOUR_USERNAME.github.io/Climate-Simulator/**.
+
+### 7. (Optional) Switch back to main for daily work
+
+```powershell
+git checkout main
+```
+
+When you want to update the live site: switch to the deploy branch, rebuild, copy to `docs/`, commit, push (see "When you change the app" below).
+
+---
+
+## Option B: Deploy from `main` branch
 
 ### 1. Open terminal in the project folder
 
@@ -120,21 +187,39 @@ Open that URL in your browser. The SME Resilience Simulator should load and run 
 
 ## When you change the app and want to update the live site
 
-1. Build again with base path:
+**If you use a separate deploy branch (e.g. `gh-pages`):**
+
+1. Merge or copy your changes into the deploy branch, then:
    ```powershell
-   cd D:\simulator\Climate-Simulator\frontend
+   git checkout gh-pages
+   git merge main
+   ```
+   *(Or make your changes directly on `gh-pages`.)*
+2. Build and copy to `docs/`:
+   ```powershell
+   cd frontend
    $env:VITE_BASE_PATH="/Climate-Simulator/"
    npm run build
    cd ..
+   if (Test-Path docs) { Remove-Item -Recurse -Force docs }
+   New-Item -ItemType Directory -Path docs
+   Copy-Item -Path frontend\dist\* -Destination docs -Recurse
    ```
-2. Copy build to `docs/` again (same commands as step 4).
-3. Commit and push:
+3. Commit and push the deploy branch:
    ```powershell
    git add -A
    git commit -m "Update simulator"
-   git push
+   git push origin gh-pages
    ```
-4. GitHub will update the site automatically (may take 1–2 minutes).
+4. Switch back to main if you use it for development: `git checkout main`.
+
+**If you deploy from `main`:**
+
+1. Build again with base path (same as above).
+2. Copy build to `docs/` again.
+3. Commit and push to main: `git add -A`, `git commit -m "Update"`, `git push`.
+
+GitHub will update the site automatically (may take 1–2 minutes).
 
 ---
 
