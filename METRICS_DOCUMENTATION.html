@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SME Resilience Simulator V2 - Complete Metrics Documentation</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #1e40af;
+            border-bottom: 3px solid #1e40af;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        h2 {
+            color: #2563eb;
+            margin-top: 30px;
+            border-bottom: 2px solid #2563eb;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #3b82f6;
+            margin-top: 25px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 11pt;
+        }
+        th {
+            background-color: #1e40af;
+            color: white;
+            padding: 10px;
+            text-align: left;
+            font-weight: bold;
+        }
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        .new-badge {
+            background-color: #10b981;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9pt;
+            font-weight: bold;
+        }
+        .original-badge {
+            background-color: #6b7280;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9pt;
+        }
+        .summary-box {
+            background-color: #eff6ff;
+            border-left: 4px solid #2563eb;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .section-header {
+            background-color: #f1f5f9;
+            padding: 10px;
+            margin: 20px 0 10px 0;
+            border-left: 4px solid #3b82f6;
+            font-weight: bold;
+        }
+        ul {
+            margin: 10px 0;
+        }
+        li {
+            margin: 5px 0;
+        }
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #ddd;
+            text-align: center;
+            color: #6b7280;
+            font-size: 10pt;
+        }
+        @media print {
+            body {
+                padding: 0;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>SME Resilience Simulator V2 - Complete Metrics Documentation</h1>
+    
+    <div class="summary-box">
+        <h3 style="margin-top: 0;">Overview</h3>
+        <p>This document provides a comprehensive list of all input parameters (Left Sidebar) and output calculations (Right Side Results) available in the SME Resilience Simulator V2.</p>
+        <p><strong>Total Metrics: 51</strong> (32 inputs + 19 outputs)</p>
+    </div>
+
+    <h2>📥 INPUT PARAMETERS (Left Sidebar)</h2>
+
+    <div class="section-header">1. Company Profile</div>
+    <table>
+        <thead>
+            <tr>
+                <th>Parameter</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Default</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Industry</strong></td>
+                <td>Dropdown</td>
+                <td>Business sector (Manufacturing, Services, Food, Logistics)</td>
+                <td>Manufacturing</td>
+            </tr>
+            <tr>
+                <td><strong>Horizon</strong></td>
+                <td>Dropdown</td>
+                <td>Forecast period in years</td>
+                <td>7 Years</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="section-header">2. Baseline Financials</div>
+    <table>
+        <thead>
+            <tr>
+                <th>Parameter</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Default</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Initial Revenue</strong></td>
+                <td>Number (€)</td>
+                <td>Starting annual revenue</td>
+                <td>€1,000,000</td>
+            </tr>
+            <tr>
+                <td><strong>Fixed Costs</strong></td>
+                <td>Number (€)</td>
+                <td>Annual fixed operational costs</td>
+                <td>€200,000</td>
+            </tr>
+            <tr>
+                <td><strong>Variable Costs %</strong></td>
+                <td>Slider (0-100%)</td>
+                <td>Variable costs as percentage of revenue</td>
+                <td>40%</td>
+            </tr>
+            <tr>
+                <td><strong>Revenue Growth %</strong></td>
+                <td>Slider (0-100%)</td>
+                <td>Annual revenue growth rate</td>
+                <td>5%</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="section-header">3. Sustainability Strategy</div>
+    <table>
+        <thead>
+            <tr>
+                <th>Parameter</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Default</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Sustainability CAPEX</strong></td>
+                <td>Number (€)</td>
+                <td>Initial sustainability investment</td>
+                <td>€100,000</td>
+            </tr>
+            <tr>
+                <td><strong>Energy Efficiency %</strong></td>
+                <td>Slider (0-100%)</td>
+                <td>Energy efficiency improvement</td>
+                <td>15%</td>
+            </tr>
+            <tr>
+                <td><strong>Waste Reduction %</strong></td>
+                <td>Slider (0-100%)</td>
+                <td>Waste reduction percentage</td>
+                <td>10%</td>
+            </tr>
+            <tr>
+                <td><strong>Resource Efficiency %</strong></td>
+                <td>Slider (0-100%)</td>
+                <td>Resource efficiency improvement</td>
+                <td>8%</td>
+            </tr>
+            <tr>
+                <td><strong>Circular Economy %</strong></td>
+                <td>Slider (0-100%)</td>
+                <td>Circular economy initiatives</td>
+                <td>5%</td>
+            </tr>
+            <tr>
+                <td><strong>Reputation Uplift %</strong></td>
+                <td>Slider (0-100%)</td>
+                <td>Brand reputation improvement</td>
+                <td>3%</td>
+            </tr>
+            <tr>
+                <td><strong>Green Market Access %</strong></td>
+                <td>Slider (0-100%)</td>
+                <td>Access to green market segments</td>
+                <td>5%</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="section-header">4. Employee & Productivity <span class="new-badge">NEW</span></div>
+    <table>
+        <thead>
+            <tr>
+                <th>Parameter</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Default</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Employees</strong></td>
+                <td>Number</td>
+                <td>Total number of employees</td>
+                <td>50</td>
+            </tr>
+            <tr>
+                <td><strong>Employee Growth %</strong></td>
+                <td>Slider (0-100%)</td>
+                <td>Annual employee growth rate</td>
+                <td>2%</td>
+            </tr>
+            <tr>
+                <td><strong>Productivity Gain %</strong></td>
+                <td>Slider (0-100%)</td>
+                <td>Productivity improvement percentage</td>
+                <td>10%</td>
+            </tr>
+            <tr>
+                <td><strong>Turnover Reduction %</strong></td>
+                <td>Slider (0-100%)</td>
+                <td>Employee turnover reduction</td>
+                <td>20%</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="section-header">5. Additional Financials <span class="new-badge">NEW</span></div>
+    <table>
+        <thead>
+            <tr>
+                <th>Parameter</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Default</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Initial CAPEX</strong></td>
+                <td>Number (€)</td>
+                <td>Initial capital expenditure</td>
+                <td>€50,000</td>
+            </tr>
+            <tr>
+                <td><strong>Reinvest %</strong></td>
+                <td>Slider (0-100%)</td>
+                <td>Annual reinvestment percentage</td>
+                <td>1%</td>
+            </tr>
+            <tr>
+                <td><strong>Government Subsidies</strong></td>
+                <td>Number (€)</td>
+                <td>Government subsidy amount</td>
+                <td>€15,000</td>
+            </tr>
+            <tr>
+                <td><strong>WACC</strong></td>
+                <td>Slider (0-100%)</td>
+                <td>Weighted Average Cost of Capital</td>
+                <td>7%</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="section-header">6. Impact Potentials</div>
+    <table>
+        <thead>
+            <tr>
+                <th>Parameter</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Default</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Disruption Impact</strong></td>
+                <td>Slider (0-100)</td>
+                <td>Climate disruption impact level</td>
+                <td>20</td>
+            </tr>
+            <tr>
+                <td><strong>Carbon Reduction %</strong></td>
+                <td>Slider (0-100%)</td>
+                <td>Potential carbon reduction</td>
+                <td>25%</td>
+            </tr>
+            <tr>
+                <td><strong>Scope 1 Reduction %</strong></td>
+                <td>Slider (0-100%)</td>
+                <td>Direct emissions reduction</td>
+                <td>25%</td>
+            </tr>
+            <tr>
+                <td><strong>Scope 2 Reduction %</strong></td>
+                <td>Slider (0-100%)</td>
+                <td>Indirect emissions reduction</td>
+                <td>25%</td>
+            </tr>
+            <tr>
+                <td><strong>Scope 3 Reduction %</strong></td>
+                <td>Slider (0-100%)</td>
+                <td>Value chain emissions reduction</td>
+                <td>20%</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="section-header">7. Financial Settings (Advanced)</div>
+    <table>
+        <thead>
+            <tr>
+                <th>Parameter</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Default</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Tax Rate</strong></td>
+                <td>Number (0-100%)</td>
+                <td>Corporate tax rate</td>
+                <td>25%</td>
+            </tr>
+            <tr>
+                <td><strong>Discount Rate</strong></td>
+                <td>Number (0-100%)</td>
+                <td>Discount rate for NPV calculations</td>
+                <td>8%</td>
+            </tr>
+            <tr>
+                <td><strong>Depreciation Years</strong></td>
+                <td>Number</td>
+                <td>Asset depreciation period</td>
+                <td>5 Years</td>
+            </tr>
+            <tr>
+                <td><strong>Inflation Rate</strong></td>
+                <td>Number (0-100%)</td>
+                <td>Annual inflation rate</td>
+                <td>2%</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="page-break"></div>
+
+    <h2>📊 OUTPUT CALCULATIONS (Right Side Results)</h2>
+
+    <div class="section-header">Top-Level Scores</div>
+    <table>
+        <thead>
+            <tr>
+                <th>Metric</th>
+                <th>Description</th>
+                <th>Range</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Economic Score</strong></td>
+                <td>Financial performance indicator</td>
+                <td>0-100</td>
+            </tr>
+            <tr>
+                <td><strong>Environmental Score</strong></td>
+                <td>Environmental impact indicator</td>
+                <td>0-100</td>
+            </tr>
+            <tr>
+                <td><strong>Strategic Score</strong></td>
+                <td>Strategic positioning indicator</td>
+                <td>0-100</td>
+            </tr>
+            <tr>
+                <td><strong>Overall Score</strong></td>
+                <td>Weighted composite score</td>
+                <td>0-100</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>📈 FINANCE Section (7 Metrics)</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Metric</th>
+                <th>Description</th>
+                <th>Unit</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>ROI</strong></td>
+                <td>Return on Investment percentage</td>
+                <td>%</td>
+                <td><span class="original-badge">Original</span></td>
+            </tr>
+            <tr>
+                <td><strong>IRR</strong></td>
+                <td>Internal Rate of Return</td>
+                <td>%</td>
+                <td><span class="new-badge">NEW</span></td>
+            </tr>
+            <tr>
+                <td><strong>Payback</strong></td>
+                <td>Simple payback period</td>
+                <td>Years</td>
+                <td><span class="original-badge">Original</span></td>
+            </tr>
+            <tr>
+                <td><strong>Disc. Payback</strong></td>
+                <td>Discounted payback period</td>
+                <td>Years</td>
+                <td><span class="new-badge">NEW</span></td>
+            </tr>
+            <tr>
+                <td><strong>Break Even</strong></td>
+                <td>Year when Scenario B exceeds Scenario A</td>
+                <td>Year</td>
+                <td><span class="new-badge">NEW</span></td>
+            </tr>
+            <tr>
+                <td><strong>Viability</strong></td>
+                <td>Financial viability score (NPV normalized)</td>
+                <td>/100</td>
+                <td><span class="original-badge">Original</span></td>
+            </tr>
+            <tr>
+                <td><strong>TCO</strong></td>
+                <td>Total Cost of Ownership</td>
+                <td>K€</td>
+                <td><span class="new-badge">NEW</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>🌍 CARBON Section (4 Metrics)</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Metric</th>
+                <th>Description</th>
+                <th>Unit</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Reduction (Proxy)</strong></td>
+                <td>Estimated carbon reduction - synthetic proxy for directional comparison</td>
+                <td>tCO2e</td>
+                <td><span class="original-badge">Original</span></td>
+            </tr>
+            <tr>
+                <td><strong>Cost/Ton CO2</strong></td>
+                <td>Cost efficiency per ton of CO2 reduced</td>
+                <td>€</td>
+                <td><span class="new-badge">NEW</span></td>
+            </tr>
+            <tr>
+                <td><strong>Intensity (Index)</strong></td>
+                <td>Carbon intensity index per revenue unit - normalized for comparison</td>
+                <td>kg/1K€</td>
+                <td><span class="new-badge">NEW</span></td>
+            </tr>
+            <tr>
+                <td><strong>Net Zero</strong></td>
+                <td>Net zero progress percentage</td>
+                <td>%</td>
+                <td><span class="original-badge">Original</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>⚡ EFFICIENCY Section (4 Metrics) <span class="new-badge">NEW SECTION</span></h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Metric</th>
+                <th>Description</th>
+                <th>Unit</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Energy Savings (Proxy)</strong></td>
+                <td>Estimated energy savings - proxy estimate based on efficiency assumptions</td>
+                <td>MWh</td>
+                <td><span class="new-badge">NEW</span></td>
+            </tr>
+            <tr>
+                <td><strong>Water Savings (Proxy)</strong></td>
+                <td>Estimated water savings - proxy estimate using fixed assumptions</td>
+                <td>KL</td>
+                <td><span class="new-badge">NEW</span></td>
+            </tr>
+            <tr>
+                <td><strong>Waste Diversion (Index)</strong></td>
+                <td>Waste diversion index - calculated from linear combinations for comparison</td>
+                <td>%</td>
+                <td><span class="new-badge">NEW</span></td>
+            </tr>
+            <tr>
+                <td><strong>Res. Efficiency (Index)</strong></td>
+                <td>Resource efficiency composite index - weighted combination of efficiency factors</td>
+                <td>/100</td>
+                <td><span class="new-badge">NEW</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>🛡️ RISK & ESG Section (4 Metrics)</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Metric</th>
+                <th>Description</th>
+                <th>Unit</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>ESG Score</strong></td>
+                <td>Environmental, Social, Governance composite score</td>
+                <td>/100</td>
+                <td><span class="new-badge">NEW</span></td>
+            </tr>
+            <tr>
+                <td><strong>Resilience</strong></td>
+                <td>Resilience index</td>
+                <td>Idx</td>
+                <td><span class="original-badge">Original</span></td>
+            </tr>
+            <tr>
+                <td><strong>Emp. Engage</strong></td>
+                <td>Employee engagement index</td>
+                <td>/100</td>
+                <td><span class="new-badge">NEW</span></td>
+            </tr>
+            <tr>
+                <td><strong>Exec Risk</strong></td>
+                <td>Execution risk factor</td>
+                <td>High/Med/Low</td>
+                <td><span class="original-badge">Original</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Additional Outputs</h3>
+    <ul>
+        <li><strong>Projection Charts</strong>: Annual revenue and net profit comparisons (Traditional vs Sustainable)</li>
+        <li><strong>Impact Matrix</strong>: 3x3 matrix showing Upside, Risk, and Feasibility for Economic, Environmental, and Strategic dimensions</li>
+        <li><strong>System Alerts</strong>: Automated risk alerts (Greenwashing, Financial, Strategic, Execution, Profitability)</li>
+        <li><strong>Strategy Balance</strong>: Radar chart visualizing balance between Economic, Environmental, and Strategic performance</li>
+    </ul>
+
+    <div class="page-break"></div>
+
+    <h2>🧮 CALCULATION FORMULAS & METHODOLOGY</h2>
+
+    <div class="summary-box" style="background-color: #fef3c7; border-left-color: #f59e0b;">
+        <h3 style="margin-top: 0; color: #92400e;">⚠️ Important Methodology Notes</h3>
+        
+        <h4 style="color: #78350f;">1. Proxy and Index-Based Metrics</h4>
+        <p>Several environmental and efficiency metrics in this simulator are <strong>synthetic proxies and index-based estimates</strong> used for directional comparison, not literal real-world accounting measurements. These include:</p>
+        <ul>
+            <li><strong>Carbon Reduction (Proxy)</strong>: Derived from savings calculations + a potential slider input. This is a simplified directional estimate, not a precise carbon accounting measurement.</li>
+            <li><strong>Energy Savings (Proxy)</strong>: Estimated based on efficiency percentage and OPEX assumptions. Uses simplified assumptions (energy costs as 20% of OPEX, average €0.15/kWh).</li>
+            <li><strong>Water Savings (Proxy)</strong>: Based on fixed assumption (1L per €1 revenue for manufacturing) multiplied by resource efficiency. This is a directional estimate, not actual water usage measurement.</li>
+            <li><strong>Waste Diversion (Index)</strong>: Calculated from linear combinations of waste reduction and circular economy percentages. This is an index-based metric for comparison, not actual waste diversion tracking.</li>
+            <li><strong>Carbon Intensity (Index)</strong>: A normalized index metric for comparison purposes.</li>
+            <li><strong>Resource Efficiency Index</strong>: A composite index combining multiple efficiency factors.</li>
+        </ul>
+        <p><em>These metrics are intentionally simplified to enable scenario comparison and decision support. They should be interpreted as directional indicators rather than precise measurements.</em></p>
+
+        <h4 style="color: #78350f;">2. Scoring Calibration</h4>
+        <p>The Economic, Environmental, Strategic, and Overall scores use <strong>weighted combinations and clamping to 0-100 ranges</strong>. These are:</p>
+        <ul>
+            <li><strong>Design calibrations</strong> for interpretability and decision support</li>
+            <li><strong>Not empirically derived constants</strong> from academic research</li>
+            <li><strong>Adjustable</strong> for different contexts and use cases</li>
+        </ul>
+        <p>Current weights: Economic (40%), Environmental (30%), Strategic (30%). These reflect the model's decision-support purpose and can be modified to emphasize different priorities in different contexts.</p>
+    </div>
+
+    <h3>How Inputs Affect Outputs - Calculation Flow</h3>
+    <p>The simulator uses a scenario-based approach comparing two business futures:</p>
+    <ul>
+        <li><strong>Scenario A (Traditional)</strong>: Baseline business without sustainability investments</li>
+        <li><strong>Scenario B (Sustainable)</strong>: Includes sustainability CAPEX, efficiency gains, and market benefits</li>
+    </ul>
+
+    <h3>1. Revenue Projections</h3>
+    <div class="summary-box">
+        <p><strong>Scenario A (Traditional - Grey Line):</strong></p>
+        <p><code>Revenue_A(t) = Revenue_A(t-1) × (1 + Revenue Growth Rate + Inflation Rate + 0.01)</code></p>
+        <p><em>Note: Added inflation + 1% base market growth to make traditional scenario more realistic and less flat</em></p>
+        
+        <p><strong>Scenario B (Sustainable - Purple Line):</strong></p>
+        <p><code>Revenue_B(t) = Revenue_B(t-1) × (1 + Revenue Growth Rate + Reputation Uplift % + Green Market Access %)</code></p>
+        <p><em>How it changes: Increasing "Reputation Uplift" or "Green Market Access" sliders increases revenue growth rate for Scenario B</em></p>
+    </div>
+
+    <h3>2. Operating Expenses (OPEX)</h3>
+    <div class="summary-box">
+        <p><strong>Both Scenarios:</strong></p>
+        <p><code>OPEX = Revenue × Variable Costs % + Fixed Costs</code></p>
+        
+        <p><strong>Scenario B Savings:</strong></p>
+        <p><code>Savings = OPEX_B × (Energy Efficiency % + Resource Efficiency % + Waste Reduction % + Circular Economy %)</code></p>
+        <p><em>How it changes: Increasing efficiency sliders directly increases savings, which improves profit in Scenario B</em></p>
+    </div>
+
+    <h3>3. Profit Calculations</h3>
+    <div class="summary-box">
+        <p><strong>Scenario A:</strong></p>
+        <p><code>EBIT_A = Revenue_A - OPEX_A</code></p>
+        <p><code>Tax_A = max(0, EBIT_A × Tax Rate)</code></p>
+        <p><code>Profit_A = EBIT_A - Tax_A</code></p>
+        
+        <p><strong>Scenario B:</strong></p>
+        <p><code>EBITDA_B = Revenue_B - OPEX_B + Savings</code></p>
+        <p><code>EBIT_B = EBITDA_B - Depreciation</code></p>
+        <p><code>Tax_B = max(0, EBIT_B × Tax Rate)</code></p>
+        <p><code>Profit_B = EBIT_B - Tax_B</code></p>
+        <p><em>How it changes: Higher efficiency gains → More savings → Higher profit. Higher tax rate → Lower profit</em></p>
+    </div>
+
+    <h3>4. Financial Metrics Calculations</h3>
+
+    <h4>ROI (Return on Investment)</h4>
+    <div class="summary-box">
+        <p><code>ROI = (Cumulative Net Profit_B + Cumulative Savings) / Total Investment × 100</code></p>
+        <p><code>Total Investment = Initial CAPEX + Sustainability CAPEX + Cumulative Reinvestments</code></p>
+        <p><em>How it changes: Higher sustainability CAPEX initially lowers ROI, but higher efficiency gains and revenue growth improve it over time</em></p>
+    </div>
+
+    <h4>IRR (Internal Rate of Return) <span class="new-badge">NEW</span></h4>
+    <div class="summary-box">
+        <p><code>IRR = Rate where NPV = 0</code></p>
+        <p>Calculated using binary search method to find the discount rate that makes:</p>
+        <p><code>NPV = -Initial Investment + Σ(Cash Flow_t / (1 + IRR)^t) = 0</code></p>
+        <p><em>How it changes: Higher incremental cash flows (difference between Scenario B and A) → Higher IRR</em></p>
+    </div>
+
+    <h4>NPV (Net Present Value)</h4>
+    <div class="summary-box">
+        <p><code>NPV = -Sustainability CAPEX + Σ[(Profit_B + Savings - Profit_A) / (1 + Discount Rate)^t]</code></p>
+        <p><em>How it changes: Lower discount rate → Higher NPV. Higher efficiency gains → Higher incremental cash flows → Higher NPV</em></p>
+    </div>
+
+    <h4>Payback Period</h4>
+    <div class="summary-box">
+        <p><code>Payback = Year when Cumulative Gain ≥ Sustainability CAPEX</code></p>
+        <p><code>Gain per year = (Profit_B + Savings) - Profit_A</code></p>
+        <p><em>How it changes: Higher efficiency gains → Faster payback. Higher sustainability CAPEX → Longer payback</em></p>
+    </div>
+
+    <h4>Discounted Payback Period <span class="new-badge">NEW</span></h4>
+    <div class="summary-box">
+        <p><code>Discounted Payback = Year when Cumulative Discounted Cash Flow ≥ Initial Investment</code></p>
+        <p><code>Discounted CF = (Profit_B + Savings - Profit_A) / (1 + Discount Rate)^t</code></p>
+        <p><em>How it changes: Accounts for time value of money, always longer than simple payback</em></p>
+    </div>
+
+    <h4>Break-Even Year <span class="new-badge">NEW</span></h4>
+    <div class="summary-box">
+        <p><code>Break-Even = First year where Profit_B > Profit_A</code></p>
+        <p><em>How it changes: Higher efficiency gains and revenue growth → Earlier break-even point</em></p>
+    </div>
+
+    <h4>TCO (Total Cost of Ownership) <span class="new-badge">NEW</span></h4>
+    <div class="summary-box">
+        <p><code>TCO = Initial CAPEX + Sustainability CAPEX + Σ(OPEX_B) + Cumulative Reinvestments</code></p>
+        <p><em>How it changes: Higher reinvestment % → Higher TCO. Higher efficiency → Lower OPEX → Lower TCO</em></p>
+    </div>
+
+    <h3>5. Environmental Metrics Calculations</h3>
+
+    <h4>Carbon Reduction (Proxy) (tCO2e)</h4>
+    <div class="summary-box">
+        <p><code>Carbon Reduction = (Total Savings × 0.05) + (Carbon Reduction Potential × 10)</code></p>
+        <p><strong>Note:</strong> This is a synthetic proxy estimate for directional comparison, not a precise carbon accounting measurement.</p>
+        <p><em>How it changes: Higher efficiency gains → More savings → More carbon reduction. Higher "Carbon Reduction %" slider → More reduction</em></p>
+    </div>
+
+    <h4>Cost per Ton CO2 <span class="new-badge">NEW</span></h4>
+    <div class="summary-box">
+        <p><code>Cost/Ton CO2 = Sustainability CAPEX / Carbon Reduction (tons)</code></p>
+        <p><em>How it changes: Lower sustainability CAPEX or higher carbon reduction → Better cost efficiency</em></p>
+    </div>
+
+    <h4>Carbon Intensity (Index) <span class="new-badge">NEW</span></h4>
+    <div class="summary-box">
+        <p><code>Carbon Intensity = (Carbon Reduction / Total Revenue) × 1000</code></p>
+        <p>Units: kg CO2 per €1,000 revenue</p>
+        <p><strong>Note:</strong> This is a normalized index metric for comparison purposes.</p>
+        <p><em>How it changes: Higher revenue or lower carbon → Better intensity (lower is better)</em></p>
+    </div>
+
+    <h4>Net Zero Progress</h4>
+    <div class="summary-box">
+        <p><code>Net Zero Progress = Environmental Score</code></p>
+        <p><code>Environmental Score = (Efficiency × 20%) + (Scope Reductions × 40%) + (Carbon Potential × 40%)</code></p>
+        <p><em>How it changes: Increasing Scope 1/2/3 reductions or Carbon Reduction % slider directly improves net zero progress</em></p>
+    </div>
+
+    <h3>6. Efficiency Metrics Calculations <span class="new-badge">NEW</span></h3>
+
+    <h4>Energy Savings (Proxy) (kWh)</h4>
+    <div class="summary-box">
+        <p><code>Energy Savings = (Total OPEX_B × Energy Efficiency % × 20%) / €0.15 per kWh</code></p>
+        <p><strong>Note:</strong> This is a proxy estimate based on simplified assumptions (energy costs as 20% of OPEX, average €0.15/kWh).</p>
+        <p><em>How it changes: Higher "Energy Efficiency %" slider → More energy savings. Assumes energy costs are 20% of OPEX</em></p>
+    </div>
+
+    <h4>Water Savings (Proxy) (Liters)</h4>
+    <div class="summary-box">
+        <p><code>Water Savings = Total Revenue_B × Resource Efficiency %</code></p>
+        <p>Assumes 1L water per €1 revenue for manufacturing</p>
+        <p><strong>Note:</strong> This is a proxy estimate using fixed assumptions. It is a directional estimate, not actual water usage measurement.</p>
+        <p><em>How it changes: Higher "Resource Efficiency %" slider → More water savings</em></p>
+    </div>
+
+    <h4>Waste Diversion (Index)</h4>
+    <div class="summary-box">
+        <p><code>Waste Diversion = (Waste Reduction % × 100) + (Circular Economy % × 30)</code></p>
+        <p>Capped at 100%</p>
+        <p><strong>Note:</strong> This is an index-based metric calculated from linear combinations for comparison, not actual waste diversion tracking.</p>
+        <p><em>How it changes: Both "Waste Reduction %" and "Circular Economy %" sliders contribute to waste diversion</em></p>
+    </div>
+
+    <h4>Resource Efficiency Index</h4>
+    <div class="summary-box">
+        <p><code>Resource Efficiency = (Energy × 30% + Resource × 30% + Waste × 20% + Circular × 20%) × 100</code></p>
+        <p><strong>Note:</strong> This is a composite index combining multiple efficiency factors for comparison purposes.</p>
+        <p><em>How it changes: Weighted average of all efficiency metrics. Increasing any efficiency slider improves the index</em></p>
+    </div>
+
+    <h3>7. Strategic & ESG Metrics Calculations</h3>
+
+    <h4>ESG Score <span class="new-badge">NEW</span></h4>
+    <div class="summary-box">
+        <p><code>ESG Score = (Environmental × 40%) + (Social × 30%) + (Governance × 30%)</code></p>
+        <p><code>Social = (Reputation × 50% + Productivity × 30% + Turnover Reduction × 20%) × 100</code></p>
+        <p><code>Governance = 100 - Execution Risk</code></p>
+        <p><em>How it changes: Improving environmental metrics, reputation, productivity, or reducing execution risk improves ESG score</em></p>
+    </div>
+
+    <h4>Employee Engagement Index <span class="new-badge">NEW</span></h4>
+    <div class="summary-box">
+        <p><code>Employee Engagement = (Productivity Gain × 40% + Turnover Reduction × 30% + Reputation × 30%) × 100</code></p>
+        <p><em>How it changes: Higher productivity gains, lower turnover, better reputation → Higher engagement</em></p>
+    </div>
+
+    <h4>Resilience Index</h4>
+    <div class="summary-box">
+        <p><code>Resilience = Strategic Score</code></p>
+        <p><code>Strategic Score = (Reputation × 3 + Productivity × 3 + Turnover Reduction × 2 + Green Market × 2 + Disruption Impact/100) × 10</code></p>
+        <p><strong>Note on Disruption Impact:</strong> In this formula, "Disruption Impact" represents <strong>strategic urgency and adaptation incentive</strong> (a contextual driver), not risk exposure. Higher values indicate greater strategic motivation to adapt and build resilience through sustainability investments, which is why it contributes positively to the Strategic Score. This reflects the model's assumption that awareness of climate disruption creates strategic urgency that drives better adaptation outcomes.</p>
+        <p><em>How it changes: Higher reputation, productivity, green market access → Higher resilience. Higher disruption impact (as strategic urgency driver) → Higher resilience through increased adaptation incentive</em></p>
+    </div>
+
+    <h3>8. Score Calculations</h3>
+
+    <h4>Economic Score</h4>
+    <div class="summary-box">
+        <p><code>Economic Score = 50 + (ROI × 20)</code></p>
+        <p>Clamped to 0-100 range</p>
+        <p><strong>Scoring Calibration Note:</strong> The formula and clamping are design calibrations for interpretability, not empirically derived constants.</p>
+        <p><em>How it changes: Higher ROI → Higher economic score. Directly tied to financial performance</em></p>
+    </div>
+
+    <h4>Environmental Score</h4>
+    <div class="summary-box">
+        <p><code>Environmental Score = (Efficiency Gains × 20%) + (Scope Reductions × 40%) + (Carbon Potential × 40%)</code></p>
+        <p><code>Efficiency Gains = (Energy + Resource + Waste + Circular) × 25</code></p>
+        <p><code>Scope Reductions = (Scope 1 + Scope 2 + Scope 3) / 3</code></p>
+        <p>Clamped to 0-100 range</p>
+        <p><strong>Scoring Calibration Note:</strong> The weights (20%, 40%, 40%) and clamping are design calibrations for interpretability, not empirically derived constants.</p>
+        <p><em>How it changes: Increasing any efficiency slider or scope reduction slider improves environmental score</em></p>
+    </div>
+
+    <h4>Strategic Score</h4>
+    <div class="summary-box">
+        <p><code>Strategic Score = (Reputation × 3 + Productivity × 3 + Turnover Reduction × 2 + Green Market × 2 + Disruption Impact/100) × 10</code></p>
+        <p>Clamped to 0-100 range</p>
+        <p><strong>Note on Disruption Impact:</strong> "Disruption Impact" in this formula represents <strong>strategic urgency and adaptation incentive</strong> (contextual driver), not risk exposure. Higher values indicate greater strategic motivation to adapt, which drives better resilience outcomes through sustainability investments.</p>
+        <p><em>How it changes: Multiple factors contribute. Higher reputation and productivity have the most impact. Higher disruption impact (as strategic urgency) increases adaptation incentive and thus contributes positively to strategic positioning</em></p>
+    </div>
+
+    <h4>Overall Score</h4>
+    <div class="summary-box">
+        <p><code>Overall Score = (Economic × 40%) + (Environmental × 30%) + (Strategic × 30%)</code></p>
+        <p><strong>Scoring Calibration Note:</strong> The weights (Economic 40%, Environmental 30%, Strategic 30%) and the clamping to 0-100 range are <strong>design calibrations for interpretability and decision support</strong>, not empirically derived constants from academic research. These weights reflect the model's decision-support purpose and can be adjusted for different contexts or use cases to emphasize different priorities.</p>
+        <p><em>How it changes: Weighted average. Economic performance has the highest weight (40%)</em></p>
+    </div>
+
+    <h3>9. How Input Changes Affect Graphs</h3>
+    <div class="summary-box">
+        <h4>Revenue Graph (Grey vs Purple Lines):</h4>
+        <ul>
+            <li><strong>Revenue Growth Rate</strong>: Affects both lines. Higher value → Steeper growth for both scenarios</li>
+            <li><strong>Reputation Uplift %</strong>: Only affects purple line (Scenario B). Higher value → Purple line grows faster</li>
+            <li><strong>Green Market Access %</strong>: Only affects purple line. Higher value → Purple line grows faster</li>
+            <li><strong>Inflation Rate</strong>: Affects grey line (Scenario A). Higher inflation → Grey line grows slightly more</li>
+        </ul>
+
+        <h4>Net Profit Graph (Grey vs Purple Lines):</h4>
+        <ul>
+            <li><strong>Energy/Resource/Waste/Circular Efficiency %</strong>: Only affects purple line. Higher values → More savings → Higher profit for Scenario B</li>
+            <li><strong>Variable Costs %</strong>: Affects both lines. Higher value → Lower profit for both</li>
+            <li><strong>Fixed Costs</strong>: Affects both lines. Higher value → Lower profit for both</li>
+            <li><strong>Tax Rate</strong>: Affects both lines. Higher value → Lower profit for both</li>
+            <li><strong>Sustainability CAPEX</strong>: Affects purple line initially (depreciation), but long-term benefits from efficiency gains</li>
+        </ul>
+    </div>
+
+    <h3>10. Real-Time Calculation Updates</h3>
+    <div class="summary-box">
+        <p>When you adjust any input parameter in the left sidebar:</p>
+        <ol>
+            <li><strong>Immediate Recalculation</strong>: All formulas are recalculated instantly (200ms debounce)</li>
+            <li><strong>Graph Updates</strong>: Both revenue and profit graphs update to show new projections</li>
+            <li><strong>Score Updates</strong>: All four top-level scores (Economic, Environmental, Strategic, Overall) recalculate</li>
+            <li><strong>Deep Metrics Update</strong>: All 19 detailed metrics in Deep Dive Indicators recalculate</li>
+            <li><strong>Impact Matrix Update</strong>: The 3x3 matrix updates with new Upside, Risk, and Feasibility values</li>
+            <li><strong>Alerts Update</strong>: System checks for new risk alerts based on updated scores</li>
+        </ol>
+        <p><em>Example: Increasing "Energy Efficiency %" from 15% to 30% will:</em></p>
+        <ul>
+            <li>Increase savings in Scenario B</li>
+            <li>Improve profit for purple line</li>
+            <li>Increase Energy Savings metric</li>
+            <li>Improve Resource Efficiency Index</li>
+            <li>Potentially improve Environmental Score</li>
+            <li>May improve ROI and payback period</li>
+        </ul>
+    </div>
+
+    <div class="page-break"></div>
+
+    <h2>📋 Summary Statistics</h2>
+
+    <div class="summary-box">
+        <h3 style="margin-top: 0;">Input Parameters</h3>
+        <ul>
+            <li><strong>Total Input Parameters</strong>: 32
+                <ul>
+                    <li>Original: 24</li>
+                    <li><strong>Newly Added</strong>: 8</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h3>Output Calculations</h3>
+        <ul>
+            <li><strong>Total Output Metrics</strong>: 19
+                <ul>
+                    <li>Original: 7</li>
+                    <li><strong>Newly Added</strong>: 12</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h3>Breakdown by Category</h3>
+        <p><strong>Inputs:</strong></p>
+        <ul>
+            <li>Company Profile: 2 parameters</li>
+            <li>Baseline Financials: 4 parameters</li>
+            <li>Sustainability Strategy: 7 parameters</li>
+            <li>Employee & Productivity: 4 parameters <span class="new-badge">NEW</span></li>
+            <li>Additional Financials: 4 parameters <span class="new-badge">NEW</span></li>
+            <li>Impact Potentials: 5 parameters</li>
+            <li>Financial Settings: 4 parameters</li>
+        </ul>
+
+        <p><strong>Outputs:</strong></p>
+        <ul>
+            <li>Top-Level Scores: 4 metrics</li>
+            <li>Finance Section: 7 metrics (2 new)</li>
+            <li>Carbon Section: 4 metrics (2 new)</li>
+            <li>Efficiency Section: 4 metrics (all new) <span class="new-badge">NEW</span></li>
+            <li>Risk & ESG Section: 4 metrics (2 new)</li>
+        </ul>
+    </div>
+
+    <h2>🔄 Calculation Flow</h2>
+    <ol>
+        <li><strong>Input Parameters</strong> → User adjusts values in left sidebar</li>
+        <li><strong>Backend Processing</strong> → Simulator calculates all metrics</li>
+        <li><strong>Output Display</strong> → Results shown in right side panels:
+            <ul>
+                <li>Scorecards (top)</li>
+                <li>Projection Charts (middle)</li>
+                <li>Deep Dive Indicators (bottom)</li>
+                <li>Impact Matrix (right)</li>
+                <li>Alerts & Balance (right)</li>
+            </ul>
+        </li>
+    </ol>
+
+    <h2>📝 Notes</h2>
+    <ul>
+        <li>All percentages are displayed as 0-100 scale</li>
+        <li>Financial values are in Euros (€)</li>
+        <li>Time periods are in years</li>
+        <li>Scores are normalized to 0-100 range</li>
+        <li>Real-time updates: Changes to inputs immediately recalculate all outputs</li>
+        <li>All new calculations are marked with <span class="new-badge">NEW</span> label</li>
+    </ul>
+
+    <h2>🎯 Academic Purpose</h2>
+    <p>This simulator provides comprehensive financial and sustainability analysis for academic research, allowing students and researchers to:</p>
+    <ul>
+        <li>Compare traditional vs sustainable business scenarios</li>
+        <li>Analyze financial viability of sustainability investments</li>
+        <li>Evaluate environmental impact metrics</li>
+        <li>Assess strategic positioning and risk factors</li>
+        <li>Study ESG performance indicators</li>
+    </ul>
+
+    <div class="footer">
+        <p><strong>Document Version: 2.0</strong></p>
+        <p>Last Updated: 2025</p>
+        <p><strong>Total Metrics: 51 (32 inputs + 19 outputs)</strong></p>
+    </div>
+</body>
+</html>
+

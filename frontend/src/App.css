@@ -1,0 +1,7 @@
+* {
+  min-height: 0;
+}
+
+.grid>* {
+  min-height: 0;
+}
