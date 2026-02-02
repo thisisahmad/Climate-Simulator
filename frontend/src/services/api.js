@@ -1,13 +1,15 @@
-import axios from 'axios';
+/**
+ * SME Simulator - frontend-only (no backend).
+ * Uses local calculateSme for GitHub Pages / static deployment.
+ */
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+import { calculateSme } from "../simulator/index.js";
 
-export const api = axios.create({
-    baseURL: API_URL,
-});
-
-// SME Simulator
-export const calculateSmeImpact = async (inputs) => {
-    const response = await api.post('/sme/calculate', inputs);
-    return response.data;
-};
+/**
+ * Run SME simulation locally. Same response shape as former backend API.
+ * @param {Object} inputs - SmeInputs (32 params)
+ * @returns {Promise<Object>} SmeOutputs: { scores, heatmap, alerts, details, projections }
+ */
+export function calculateSmeImpact(inputs) {
+  return Promise.resolve(calculateSme(inputs));
+}
