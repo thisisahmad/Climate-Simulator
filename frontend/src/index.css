@@ -2,25 +2,14 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #6366f1;
-  /* Indigo 500 */
-  --color-secondary: #0ea5e9;
-  /* Sky 500 */
-  --color-accent: #f59e0b;
-  /* Amber 500 */
-
-  --color-background: #0f172a;
-  /* Slate 900 */
-  --color-surface: #1e293b;
-  /* Slate 800 */
-
-  --color-text: #f8fafc;
-  /* Slate 50 */
-  --color-text-muted: #94a3b8;
-  /* Slate 400 */
-
+  --color-primary: #0d9488;
+  --color-secondary: #2563eb;
+  --color-accent: #d97706;
+  --color-background: #f8fafc;
+  --color-surface: #ffffff;
+  --color-text: #0f172a;
+  --color-text-muted: #475569;
   --font-sans: 'Outfit', sans-serif;
-
   --animate-fade-in: fadeIn 0.5s ease-out;
 }
 
@@ -30,10 +19,16 @@
     -webkit-text-size-adjust: 100%;
   }
   body {
-    @apply bg-slate-950 text-slate-50 font-sans antialiased selection:bg-indigo-500/30 selection:text-indigo-200;
+    @apply font-sans antialiased;
+    color: #0f172a;
     overflow-x: hidden;
     min-height: 100dvh;
     min-height: 100vh;
+    background: linear-gradient(180deg, #e2e8f0 0%, #f1f5f9 30%, #f8fafc 100%);
+  }
+  body::selection {
+    background: rgba(13, 148, 136, 0.3);
+    color: #0f172a;
   }
   @media (max-width: 1023px) {
     body { overflow-y: auto; }
@@ -45,29 +40,40 @@
 
 @layer utilities {
   .glass-panel {
-    @apply bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 shadow-xl;
+    @apply backdrop-blur-xl shadow-xl;
+    background-color: #ffffff;
+    border: 1px solid #cbd5e1;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
   }
 
   .glass-card {
-    @apply bg-slate-800/60 backdrop-blur-md border border-slate-700/50 shadow-lg hover:border-slate-600 transition-all duration-300;
+    @apply shadow-lg transition-all duration-300;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+  }
+  .glass-card:hover {
+    border-color: #94a3b8;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
   }
 
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-cyan-400;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-teal-600 to-blue-600;
   }
 
-  /* Custom Scrollbar */
   ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
   }
-
   ::-webkit-scrollbar-track {
-    background: transparent;
+    background: #f1f5f9;
+    border-radius: 9999px;
   }
-
   ::-webkit-scrollbar-thumb {
-    @apply bg-slate-700 rounded-full hover:bg-slate-600;
+    background: #94a3b8;
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
   }
 }
 

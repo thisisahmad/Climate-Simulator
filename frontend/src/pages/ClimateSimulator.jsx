@@ -77,16 +77,16 @@ const ClimateSimulator = () => {
     };
 
     return (
-        <div className="flex flex-col min-h-screen bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-800 via-slate-950 to-black text-slate-100 font-sans overflow-x-hidden">
+        <div className="flex flex-col min-h-screen text-slate-800 font-sans overflow-x-hidden bg-gradient-to-b from-slate-100 to-slate-50">
             {/* -- Top Header Bar -- */}
-            <div className="flex-none h-12 sm:h-14 border-b border-indigo-500/10 flex items-center justify-between px-4 sm:px-6 bg-slate-900/40 backdrop-blur-md">
+            <div className="flex-none h-12 sm:h-14 border-b border-teal-200 flex items-center justify-between px-4 sm:px-6 bg-teal-600 shadow-md">
                 <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-                    <div className="w-8 h-8 sm:w-9 sm:h-9 flex-shrink-0 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                    <div className="w-8 h-8 sm:w-9 sm:h-9 flex-shrink-0 rounded-lg bg-white/20 flex items-center justify-center ring-2 ring-white/30">
                         <Activity className="text-white w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
                     <div className="min-w-0">
-                        <h1 className="text-xs sm:text-sm font-black tracking-tighter text-slate-100 uppercase truncate">SME Resilience Simulator V2</h1>
-                        <p className="hidden sm:block text-[9px] font-bold text-indigo-400/60 uppercase tracking-widest leading-none">Scenario-Driven Financial Analysis</p>
+                        <h1 className="text-xs sm:text-sm font-black tracking-tighter text-white uppercase truncate">SME Resilience Simulator V2</h1>
+                        <p className="hidden sm:block text-[9px] font-semibold text-teal-100 uppercase tracking-widest leading-none">Scenario-Driven Financial Analysis</p>
                     </div>
                 </div>
             </div>
@@ -95,28 +95,28 @@ const ClimateSimulator = () => {
             <div className="flex-1 min-h-0 flex flex-col lg:flex-row gap-2 p-2 sm:p-3 overflow-y-auto overflow-x-hidden">
 
                 {/* -- Left Panel: Inputs -- */}
-                <div className="w-full lg:w-[380px] lg:flex-none flex flex-col glass-panel rounded-xl overflow-hidden border-indigo-500/10 shadow-2xl lg:max-h-[calc(100vh-5rem)]">
-                    <div className="px-4 sm:px-5 py-3 sm:py-4 border-b border-white/5 bg-slate-800/20 flex items-center gap-3">
-                        <Settings className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-400 flex-shrink-0" />
-                        <h2 className="text-[11px] sm:text-[12px] font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] text-slate-300">Parameters</h2>
+                <div className="w-full lg:w-[380px] lg:flex-none flex flex-col glass-panel rounded-xl overflow-hidden shadow-2xl lg:max-h-[calc(100vh-5rem)]">
+                    <div className="px-4 sm:px-5 py-3 sm:py-4 border-b border-slate-200 flex items-center gap-3 bg-slate-50">
+                        <Settings className="w-4 h-4 sm:w-5 sm:h-5 text-teal-600 flex-shrink-0" />
+                        <h2 className="text-[11px] sm:text-[12px] font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] text-slate-700">Parameters</h2>
                     </div>
 
                     <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4 sm:py-6 space-y-6 sm:space-y-8 customized-scrollbar max-h-[60vh] lg:max-h-none">
 
                         {/* 1. General Info */}
                         <div className="space-y-4">
-                            <h3 className="text-[11px] font-black text-indigo-400 mb-4 flex items-center gap-3 uppercase tracking-[0.25em]">
+                            <h3 className="text-[11px] font-black text-teal-700 mb-4 flex items-center gap-3 uppercase tracking-[0.25em]">
                                 <Users className="w-4 h-4" /> Company Profile
                             </h3>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <div className="space-y-1">
-                                    <label className="text-[9px] uppercase font-black text-slate-500 tracking-wider">Industry</label>
+                                    <label className="text-[9px] uppercase font-bold text-slate-600 tracking-wider">Industry</label>
                                     <select value={inputs.industry} onChange={e => h('industry', e.target.value)} className="input-field w-full">
                                         {['Manufacturing', 'Services', 'Food', 'Logistics'].map(opt => <option key={opt}>{opt}</option>)}
                                     </select>
                                 </div>
                                 <div className="space-y-1">
-                                    <label className="text-[9px] uppercase font-black text-slate-500 tracking-wider">Horizon</label>
+                                    <label className="text-[9px] uppercase font-bold text-slate-600 tracking-wider">Horizon</label>
                                     <select value={inputs.forecast_horizon} onChange={e => h('forecast_horizon', parseInt(e.target.value))} className="input-field w-full">
                                         {[5, 7, 10].map(opt => <option key={opt} value={opt}>{opt} Years</option>)}
                                     </select>
@@ -126,7 +126,7 @@ const ClimateSimulator = () => {
 
                         {/* 2. Baseline Financials */}
                         <div className="space-y-6">
-                            <h3 className="text-[11px] font-black text-emerald-400 mb-4 flex items-center gap-3 uppercase tracking-[0.25em]">
+                            <h3 className="text-[11px] font-black text-emerald-700 mb-4 flex items-center gap-3 uppercase tracking-[0.25em]">
                                 <DollarSign className="w-4 h-4" /> Baseline Financials
                             </h3>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4">
@@ -139,12 +139,12 @@ const ClimateSimulator = () => {
 
                         {/* 3. Sustainability Strategy */}
                         <div className="space-y-6">
-                            <h3 className="text-[11px] font-black text-indigo-400 mb-4 flex items-center gap-3 uppercase tracking-[0.25em]">
+                            <h3 className="text-[11px] font-black text-teal-700 mb-4 flex items-center gap-3 uppercase tracking-[0.25em]">
                                 <Leaf className="w-4 h-4" /> Sustainability Strategy
                             </h3>
                             <NumericInput label="Sustainability CAPEX" value={inputs.sustainability_capex} onChange={v => h('sustainability_capex', v)} prefix="€" />
                             <div className="space-y-4">
-                                <h4 className="text-[9px] font-black text-slate-600 uppercase tracking-widest">Efficiency Gains</h4>
+                                <h4 className="text-[9px] font-bold text-slate-600 uppercase tracking-widest">Efficiency Gains</h4>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <SliderControl label="Energy Efficiency" value={Math.round(inputs.energy_efficiency_pct * 100)} onChange={v => h('energy_efficiency_pct', v / 100)} suffix="%" compact />
                                     <SliderControl label="Waste Reduction" value={Math.round(inputs.waste_reduction_pct * 100)} onChange={v => h('waste_reduction_pct', v / 100)} suffix="%" compact />
@@ -153,7 +153,7 @@ const ClimateSimulator = () => {
                                 </div>
                             </div>
                             <div className="space-y-4">
-                                <h4 className="text-[9px] font-black text-slate-600 uppercase tracking-widest">Market & Reputation</h4>
+                                <h4 className="text-[9px] font-bold text-slate-600 uppercase tracking-widest">Market & Reputation</h4>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <SliderControl label="Reputation Uplift" value={Math.round(inputs.reputation_uplift_pct * 100)} onChange={v => h('reputation_uplift_pct', v / 100)} suffix="%" compact />
                                     <SliderControl label="Green Market Access" value={Math.round(inputs.green_market_access_pct * 100)} onChange={v => h('green_market_access_pct', v / 100)} suffix="%" compact />
@@ -163,7 +163,7 @@ const ClimateSimulator = () => {
 
                         {/* 4. Employee & Productivity (METRICS_DOC) */}
                         <div className="space-y-6">
-                            <h3 className="text-[11px] font-black text-cyan-400 mb-4 flex items-center gap-3 uppercase tracking-[0.25em]">
+                            <h3 className="text-[11px] font-black text-cyan-700 mb-4 flex items-center gap-3 uppercase tracking-[0.25em]">
                                 <Users className="w-4 h-4" /> Employee & Productivity
                             </h3>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4">
@@ -176,7 +176,7 @@ const ClimateSimulator = () => {
 
                         {/* 5. Additional Financials (METRICS_DOC) */}
                         <div className="space-y-6">
-                            <h3 className="text-[11px] font-black text-emerald-400 mb-4 flex items-center gap-3 uppercase tracking-[0.25em]">
+                            <h3 className="text-[11px] font-black text-emerald-700 mb-4 flex items-center gap-3 uppercase tracking-[0.25em]">
                                 <DollarSign className="w-4 h-4" /> Additional Financials
                             </h3>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4">
@@ -189,7 +189,7 @@ const ClimateSimulator = () => {
 
                         {/* 4. Impact Potentials (instructions (1).docx Mandatory) */}
                         <div className="space-y-6">
-                            <h3 className="text-[11px] font-black text-amber-400 mb-4 flex items-center gap-3 uppercase tracking-[0.25em]">
+                            <h3 className="text-[11px] font-black text-amber-700 mb-4 flex items-center gap-3 uppercase tracking-[0.25em]">
                                 <Zap className="w-4 h-4" /> Impact Potentials
                             </h3>
                             <div className="space-y-4">
@@ -204,17 +204,17 @@ const ClimateSimulator = () => {
                         </div>
 
                         {/* 5. Advanced Settings */}
-                        <div className="pt-2 border-t border-slate-700/50">
+                        <div className="pt-2 border-t border-slate-200">
                             <button
                                 onClick={() => setShowAdvanced(!showAdvanced)}
-                                className="flex items-center justify-between w-full py-2 px-3 bg-slate-800/40 border border-slate-700/50 rounded-lg text-xs font-semibold hover:bg-slate-700/50 transition-all group"
+                                className="flex items-center justify-between w-full py-2 px-3 rounded-lg text-xs font-semibold transition-all group border border-slate-300 bg-slate-100 hover:bg-teal-50 hover:border-teal-400 text-slate-700"
                             >
-                                <span className="group-hover:text-indigo-400 transition-colors tracking-widest uppercase text-[10px]">Financial Settings</span>
+                                <span className="group-hover:text-teal-700 transition-colors tracking-widest uppercase text-[10px]">Financial Settings</span>
                                 {showAdvanced ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
                             </button>
 
                             {showAdvanced && (
-                                <div className="mt-4 space-y-4 pl-4 border-l border-indigo-500/20 animate-fade-in">
+                                <div className="mt-4 space-y-4 pl-4 border-l-2 border-teal-400 animate-fade-in">
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         <NumericInput label="Tax Rate" value={Math.round(inputs.tax_rate * 100)} onChange={v => h('tax_rate', v / 100)} suffix="%" compact />
                                         <NumericInput label="Discount" value={Math.round(inputs.discount_rate * 100)} onChange={v => h('discount_rate', v / 100)} suffix="%" compact />
@@ -240,7 +240,7 @@ const ClimateSimulator = () => {
 
                     {/* Row 2: Projection Charts & Heatmap - stack on mobile/tablet, 3 cols on lg+ */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-2 sm:gap-3 flex-none">
-                        <div className="lg:col-span-4 min-h-[260px] sm:min-h-[300px] lg:min-h-[340px] glass-panel rounded-xl animate-fade-in shadow-xl bg-slate-900/40" style={{ animationDelay: '0.1s' }}>
+                        <div className="lg:col-span-4 min-h-[260px] sm:min-h-[300px] lg:min-h-[340px] glass-panel rounded-xl animate-fade-in shadow-xl" style={{ animationDelay: '0.1s' }}>
                             <ProjectionChart
                                 data={outputs?.projections}
                                 title="Revenue"
@@ -248,7 +248,7 @@ const ClimateSimulator = () => {
                                 dataKeyB="revenue_b"
                             />
                         </div>
-                        <div className="lg:col-span-4 min-h-[260px] sm:min-h-[300px] lg:min-h-[340px] glass-panel rounded-xl animate-fade-in shadow-xl bg-slate-900/40" style={{ animationDelay: '0.2s' }}>
+                        <div className="lg:col-span-4 min-h-[260px] sm:min-h-[300px] lg:min-h-[340px] glass-panel rounded-xl animate-fade-in shadow-xl" style={{ animationDelay: '0.2s' }}>
                             <ProjectionChart
                                 data={outputs?.projections}
                                 title="Net Profit"
@@ -256,7 +256,7 @@ const ClimateSimulator = () => {
                                 dataKeyB="profit_b"
                             />
                         </div>
-                        <div className="md:col-span-2 lg:col-span-4 min-h-[220px] sm:min-h-[260px] lg:min-h-[340px] glass-panel rounded-xl animate-fade-in shadow-xl bg-slate-900/40" style={{ animationDelay: '0.3s' }}>
+                        <div className="md:col-span-2 lg:col-span-4 min-h-[220px] sm:min-h-[260px] lg:min-h-[340px] glass-panel rounded-xl animate-fade-in shadow-xl" style={{ animationDelay: '0.3s' }}>
                             <ImpactHeatmap cells={outputs?.heatmap} />
                         </div>
                     </div>
@@ -265,15 +265,15 @@ const ClimateSimulator = () => {
                     <div className="flex-1 min-h-[400px] lg:min-h-0 grid grid-cols-1 lg:grid-cols-12 gap-2 sm:gap-3 overflow-auto">
                         <div className="lg:col-span-12 glass-panel rounded-xl animate-fade-in overflow-hidden relative shadow-lg min-h-0" style={{ animationDelay: '0.4s' }}>
                             <div className="grid grid-cols-1 lg:grid-cols-12 h-full min-h-[360px] lg:min-h-0">
-                                <div className="lg:col-span-8 border-b lg:border-b-0 lg:border-r border-white/5 min-h-[280px]">
+                                <div className="lg:col-span-8 border-b lg:border-b-0 lg:border-r border-slate-200 min-h-[280px]">
                                     <DeepMetricsPanel details={outputs?.details} />
                                 </div>
                                 <div className="lg:col-span-4 flex flex-col min-h-[240px]">
-                                    <div className="flex-1 min-h-[120px] border-b border-white/5 overflow-hidden">
+                                    <div className="flex-1 min-h-[120px] border-b border-slate-200 overflow-hidden">
                                         <AlertBox alerts={outputs?.alerts} />
                                     </div>
                                     <div className="h-36 sm:h-44 p-3 sm:p-4 flex-shrink-0">
-                                        <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Strategy Balance</h3>
+                                        <h3 className="text-[10px] font-bold text-slate-600 uppercase tracking-widest mb-2">Strategy Balance</h3>
                                         <RadarPlot scores={outputs?.scores} />
                                     </div>
                                 </div>
@@ -286,35 +286,38 @@ const ClimateSimulator = () => {
 
             <style jsx>{`
                 .input-field {
-                    @apply bg-slate-900 border border-indigo-500/30 rounded px-3 py-2 text-[12px] font-black text-white focus:border-indigo-500 outline-none transition-all cursor-pointer shadow-xl;
+                    background-color: #ffffff;
+                    border: 1px solid #cbd5e1;
+                    border-radius: 0.5rem;
+                    padding: 0.5rem 0.75rem;
+                    font-size: 12px;
+                    font-weight: 700;
+                    color: #0f172a;
+                    outline: none;
+                    cursor: pointer;
+                    transition: border-color 0.2s, box-shadow 0.2s;
                     font-family: 'Inter', sans-serif;
                     -webkit-appearance: none;
                     -moz-appearance: none;
                     appearance: none;
-                    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23818cf8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+                    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%230d9488'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
                     background-repeat: no-repeat;
                     background-position: right 0.75rem center;
                     background-size: 1rem;
                     padding-right: 2.5rem;
                 }
+                .input-field:hover { border-color: #94a3b8; }
+                .input-field:focus { border-color: #0d9488; box-shadow: 0 0 0 2px rgba(13, 148, 136, 0.2); }
                 .input-field option {
-                    background-color: #0f172a !important;
-                    color: #ffffff !important;
+                    background-color: #ffffff !important;
+                    color: #0f172a !important;
                     padding: 12px;
                     font-weight: 700;
                 }
-                .glass-panel {
-                    @apply bg-slate-900/60 backdrop-blur-xl border border-white/5;
-                }
-                .customized-scrollbar::-webkit-scrollbar {
-                    width: 4px;
-                }
-                .customized-scrollbar::-webkit-scrollbar-track {
-                    @apply bg-transparent;
-                }
-                .customized-scrollbar::-webkit-scrollbar-thumb {
-                    @apply bg-slate-700/50 rounded-full hover:bg-slate-600/50;
-                }
+                .customized-scrollbar::-webkit-scrollbar { width: 6px; }
+                .customized-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+                .customized-scrollbar::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 9999px; }
+                .customized-scrollbar::-webkit-scrollbar-thumb:hover { background: #64748b; }
             `}</style>
         </div>
     );
