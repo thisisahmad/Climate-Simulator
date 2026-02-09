@@ -8,6 +8,7 @@ import { calculateProjections } from "./projections.js";
 import { calculateScores } from "./scores.js";
 import { calculateHeatmap, generateAlerts } from "./heatmapAlerts.js";
 import { calculateDetails } from "./indicators.js";
+import { computeKeyDrivers } from "./keyDrivers.js";
 
 /** Default SmeInputs (match backend models.py) */
 const DEFAULT_INPUTS = {
@@ -69,6 +70,12 @@ export function calculateSme(inputs) {
   const alerts = generateAlerts(i, projections, econ, env, strat);
   const details = calculateDetails(i, projections, econ, env, strat);
 
+  const key_drivers = computeKeyDrivers(i, {
+    scores: { economic: scores.economic, environmental: scores.environmental, strategic: scores.strategic, overall: scores.overall },
+    details,
+    projections,
+  });
+
   return {
     scores: {
       economic: scores.economic,
@@ -80,5 +87,6 @@ export function calculateSme(inputs) {
     alerts,
     details,
     projections,
+    key_drivers,
   };
 }

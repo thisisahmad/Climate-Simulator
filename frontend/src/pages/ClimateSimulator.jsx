@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { calculateSmeImpact } from '../services/api';
-import { NumericInput, SliderControl, ScoreCard, ImpactHeatmap, RadarPlot, AlertBox, DeepMetricsPanel, ProjectionChart } from '../components/DashboardComponents';
-import { ChevronDown, ChevronUp, Settings, Activity, Zap, BarChart3, Globe, Shield, AlertTriangle, TrendingUp, DollarSign, Leaf, Users } from 'lucide-react';
+import { NumericInput, SliderControl, ScoreCard, ImpactHeatmap, RadarPlot, AlertBox, DeepMetricsPanel, ProjectionChart, MethodologyPanel } from '../components/DashboardComponents';
+import { ChevronDown, ChevronUp, Settings, Activity, Zap, BarChart3, Globe, Shield, AlertTriangle, TrendingUp, DollarSign, Leaf, Users, FileText } from 'lucide-react';
 
 const ClimateSimulator = () => {
     // -- Inputs State --
@@ -53,6 +53,9 @@ const ClimateSimulator = () => {
     const [showAdvanced, setShowAdvanced] = useState(false);
     const [outputs, setOutputs] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [methodologyOpen, setMethodologyOpen] = useState(false);
+    const [chartShowA, setChartShowA] = useState(true);
+    const [chartShowB, setChartShowB] = useState(true);
 
     // -- Effects --
     useEffect(() => {
@@ -130,10 +133,10 @@ const ClimateSimulator = () => {
                                 <DollarSign className="w-4 h-4" /> Baseline Financials
                             </h3>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4">
-                                <NumericInput label="Init. Revenue" value={inputs.initial_revenue} onChange={v => h('initial_revenue', v)} prefix="€" compact />
-                                <NumericInput label="Fixed Costs" value={inputs.fixed_costs} onChange={v => h('fixed_costs', v)} prefix="€" compact />
-                                <SliderControl label="Var. Costs" value={Math.round(inputs.variable_costs_pct * 100)} onChange={v => h('variable_costs_pct', v / 100)} suffix="%" compact />
-                                <SliderControl label="Rev. Growth" value={Math.round(inputs.revenue_growth_rate * 100)} onChange={v => h('revenue_growth_rate', v / 100)} suffix="%" compact />
+                                <NumericInput label="Init. Revenue" value={inputs.initial_revenue} onChange={v => h('initial_revenue', v)} prefix="€" compact step={500} />
+                                <NumericInput label="Fixed Costs" value={inputs.fixed_costs} onChange={v => h('fixed_costs', v)} prefix="€" compact step={500} />
+                                <SliderControl label="Var. Costs" value={Math.round(inputs.variable_costs_pct * 100)} onChange={v => h('variable_costs_pct', v / 100)} suffix="%" compact step={1} showNumericInput numericValue={Math.round(inputs.variable_costs_pct * 100)} onNumericChange={v => h('variable_costs_pct', v / 100)} />
+                                <SliderControl label="Rev. Growth" value={Math.round(inputs.revenue_growth_rate * 100)} onChange={v => h('revenue_growth_rate', v / 100)} suffix="%" compact step={1} showNumericInput numericValue={Math.round(inputs.revenue_growth_rate * 100)} onNumericChange={v => h('revenue_growth_rate', v / 100)} />
                             </div>
                         </div>
 
@@ -142,21 +145,21 @@ const ClimateSimulator = () => {
                             <h3 className="text-[11px] font-black text-teal-700 mb-4 flex items-center gap-3 uppercase tracking-[0.25em]">
                                 <Leaf className="w-4 h-4" /> Sustainability Strategy
                             </h3>
-                            <NumericInput label="Sustainability CAPEX" value={inputs.sustainability_capex} onChange={v => h('sustainability_capex', v)} prefix="€" />
+                            <NumericInput label="Sustainability CAPEX" value={inputs.sustainability_capex} onChange={v => h('sustainability_capex', v)} prefix="€" step={500} />
                             <div className="space-y-4">
                                 <h4 className="text-[9px] font-bold text-slate-600 uppercase tracking-widest">Efficiency Gains</h4>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    <SliderControl label="Energy Efficiency" value={Math.round(inputs.energy_efficiency_pct * 100)} onChange={v => h('energy_efficiency_pct', v / 100)} suffix="%" compact />
-                                    <SliderControl label="Waste Reduction" value={Math.round(inputs.waste_reduction_pct * 100)} onChange={v => h('waste_reduction_pct', v / 100)} suffix="%" compact />
-                                    <SliderControl label="Resource Efficiency" value={Math.round(inputs.resource_efficiency_pct * 100)} onChange={v => h('resource_efficiency_pct', v / 100)} suffix="%" compact />
-                                    <SliderControl label="Circular Economy" value={Math.round(inputs.circular_economy_pct * 100)} onChange={v => h('circular_economy_pct', v / 100)} suffix="%" compact />
+                                    <SliderControl label="Energy Efficiency" value={Math.round(inputs.energy_efficiency_pct * 100)} onChange={v => h('energy_efficiency_pct', v / 100)} suffix="%" compact step={1} showNumericInput numericValue={Math.round(inputs.energy_efficiency_pct * 100)} onNumericChange={v => h('energy_efficiency_pct', v / 100)} />
+                                    <SliderControl label="Waste Reduction" value={Math.round(inputs.waste_reduction_pct * 100)} onChange={v => h('waste_reduction_pct', v / 100)} suffix="%" compact step={1} showNumericInput numericValue={Math.round(inputs.waste_reduction_pct * 100)} onNumericChange={v => h('waste_reduction_pct', v / 100)} />
+                                    <SliderControl label="Resource Efficiency" value={Math.round(inputs.resource_efficiency_pct * 100)} onChange={v => h('resource_efficiency_pct', v / 100)} suffix="%" compact step={1} showNumericInput numericValue={Math.round(inputs.resource_efficiency_pct * 100)} onNumericChange={v => h('resource_efficiency_pct', v / 100)} />
+                                    <SliderControl label="Circular Economy" value={Math.round(inputs.circular_economy_pct * 100)} onChange={v => h('circular_economy_pct', v / 100)} suffix="%" compact step={1} showNumericInput numericValue={Math.round(inputs.circular_economy_pct * 100)} onNumericChange={v => h('circular_economy_pct', v / 100)} />
                                 </div>
                             </div>
                             <div className="space-y-4">
                                 <h4 className="text-[9px] font-bold text-slate-600 uppercase tracking-widest">Market & Reputation</h4>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    <SliderControl label="Reputation Uplift" value={Math.round(inputs.reputation_uplift_pct * 100)} onChange={v => h('reputation_uplift_pct', v / 100)} suffix="%" compact />
-                                    <SliderControl label="Green Market Access" value={Math.round(inputs.green_market_access_pct * 100)} onChange={v => h('green_market_access_pct', v / 100)} suffix="%" compact />
+                                    <SliderControl label="Reputation Uplift" value={Math.round(inputs.reputation_uplift_pct * 100)} onChange={v => h('reputation_uplift_pct', v / 100)} suffix="%" compact step={1} showNumericInput numericValue={Math.round(inputs.reputation_uplift_pct * 100)} onNumericChange={v => h('reputation_uplift_pct', v / 100)} />
+                                    <SliderControl label="Green Market Access" value={Math.round(inputs.green_market_access_pct * 100)} onChange={v => h('green_market_access_pct', v / 100)} suffix="%" compact step={1} showNumericInput numericValue={Math.round(inputs.green_market_access_pct * 100)} onNumericChange={v => h('green_market_access_pct', v / 100)} />
                                 </div>
                             </div>
                         </div>
@@ -168,9 +171,9 @@ const ClimateSimulator = () => {
                             </h3>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4">
                                 <NumericInput label="Employees" value={inputs.num_employees} onChange={v => h('num_employees', v)} compact />
-                                <SliderControl label="Employee Growth" value={Math.round(inputs.employee_growth_rate * 100)} onChange={v => h('employee_growth_rate', v / 100)} suffix="%" compact />
-                                <SliderControl label="Productivity Gain" value={Math.round(inputs.productivity_gain_pct * 100)} onChange={v => h('productivity_gain_pct', v / 100)} suffix="%" compact />
-                                <SliderControl label="Turnover Reduction" value={Math.round(inputs.turnover_reduction_pct * 100)} onChange={v => h('turnover_reduction_pct', v / 100)} suffix="%" compact />
+                                <SliderControl label="Employee Growth" value={Math.round(inputs.employee_growth_rate * 100)} onChange={v => h('employee_growth_rate', v / 100)} suffix="%" compact step={1} showNumericInput numericValue={Math.round(inputs.employee_growth_rate * 100)} onNumericChange={v => h('employee_growth_rate', v / 100)} />
+                                <SliderControl label="Productivity Gain" value={Math.round(inputs.productivity_gain_pct * 100)} onChange={v => h('productivity_gain_pct', v / 100)} suffix="%" compact step={1} showNumericInput numericValue={Math.round(inputs.productivity_gain_pct * 100)} onNumericChange={v => h('productivity_gain_pct', v / 100)} />
+                                <SliderControl label="Turnover Reduction" value={Math.round(inputs.turnover_reduction_pct * 100)} onChange={v => h('turnover_reduction_pct', v / 100)} suffix="%" compact step={1} showNumericInput numericValue={Math.round(inputs.turnover_reduction_pct * 100)} onNumericChange={v => h('turnover_reduction_pct', v / 100)} />
                             </div>
                         </div>
 
@@ -180,10 +183,10 @@ const ClimateSimulator = () => {
                                 <DollarSign className="w-4 h-4" /> Additional Financials
                             </h3>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4">
-                                <NumericInput label="Initial CAPEX" value={inputs.initial_capex} onChange={v => h('initial_capex', v)} prefix="€" compact />
-                                <SliderControl label="Reinvest %" value={Math.round(inputs.reinvest_pct * 100)} onChange={v => h('reinvest_pct', v / 100)} suffix="%" compact />
-                                <NumericInput label="Gov. Subsidies" value={inputs.gov_subsidies} onChange={v => h('gov_subsidies', v)} prefix="€" compact />
-                                <SliderControl label="WACC" value={Math.round(inputs.wacc * 100)} onChange={v => h('wacc', v / 100)} suffix="%" compact />
+                                <NumericInput label="Initial CAPEX" value={inputs.initial_capex} onChange={v => h('initial_capex', v)} prefix="€" compact step={100} />
+                                <SliderControl label="Reinvest %" value={Math.round(inputs.reinvest_pct * 100)} onChange={v => h('reinvest_pct', v / 100)} suffix="%" compact step={1} showNumericInput numericValue={Math.round(inputs.reinvest_pct * 100)} onNumericChange={v => h('reinvest_pct', v / 100)} />
+                                <NumericInput label="Gov. Subsidies" value={inputs.gov_subsidies} onChange={v => h('gov_subsidies', v)} prefix="€" compact step={100} />
+                                <SliderControl label="WACC" value={Math.round(inputs.wacc * 100)} onChange={v => h('wacc', v / 100)} suffix="%" compact step={1} showNumericInput numericValue={Math.round(inputs.wacc * 100)} onNumericChange={v => h('wacc', v / 100)} />
                             </div>
                         </div>
 
@@ -194,12 +197,12 @@ const ClimateSimulator = () => {
                             </h3>
                             <div className="space-y-4">
                                 <SliderControl label="Disruption Impact" value={inputs.disruption_impact} onChange={v => h('disruption_impact', v)} suffix="" compact />
-                                <SliderControl label="Carbon Reduction" value={inputs.carbon_reduction_potential} onChange={v => h('carbon_reduction_potential', v)} suffix="%" compact />
+                                <SliderControl label="Carbon Reduction" value={inputs.carbon_reduction_potential} onChange={v => h('carbon_reduction_potential', v)} suffix="%" compact step={1} showNumericInput numericValue={inputs.carbon_reduction_potential} onNumericChange={v => h('carbon_reduction_potential', v)} />
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    <SliderControl label="Scope 1" value={inputs.scope_1_reduction} onChange={v => h('scope_1_reduction', v)} suffix="%" compact />
-                                    <SliderControl label="Scope 2" value={inputs.scope_2_reduction} onChange={v => h('scope_2_reduction', v)} suffix="%" compact />
+                                    <SliderControl label="Scope 1" value={inputs.scope_1_reduction} onChange={v => h('scope_1_reduction', v)} suffix="%" compact step={1} showNumericInput numericValue={inputs.scope_1_reduction} onNumericChange={v => h('scope_1_reduction', v)} />
+                                    <SliderControl label="Scope 2" value={inputs.scope_2_reduction} onChange={v => h('scope_2_reduction', v)} suffix="%" compact step={1} showNumericInput numericValue={inputs.scope_2_reduction} onNumericChange={v => h('scope_2_reduction', v)} />
                                 </div>
-                                <SliderControl label="Scope 3" value={inputs.scope_3_reduction} onChange={v => h('scope_3_reduction', v)} suffix="%" compact />
+                                <SliderControl label="Scope 3" value={inputs.scope_3_reduction} onChange={v => h('scope_3_reduction', v)} suffix="%" compact step={1} showNumericInput numericValue={inputs.scope_3_reduction} onNumericChange={v => h('scope_3_reduction', v)} />
                             </div>
                         </div>
 
@@ -228,14 +231,20 @@ const ClimateSimulator = () => {
                 </div>
 
                 {/* -- Right Panel: Results -- */}
-                <div className="flex-1 flex flex-col gap-3 min-h-0 min-w-0">
+                <div className="flex-1 flex flex-col gap-3 min-h-0 min-w-0 overflow-y-auto overflow-x-hidden customized-scrollbar lg:max-h-[calc(100vh-5rem)]">
+                    {/* Methodology link - top right of results */}
+                    <div className="flex justify-end flex-none">
+                        <button type="button" onClick={() => setMethodologyOpen(true)} className="flex items-center gap-1.5 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-teal-600 hover:text-teal-700 hover:underline">
+                            <FileText className="w-3.5 h-3.5" /> Methodology & assumptions
+                        </button>
+                    </div>
 
                     {/* Row 1: Scorecards - 2x2 on mobile, 4 cols on md+ */}
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 flex-none">
-                        <ScoreCard title="Economic" score={outputs?.scores?.economic || 0} icon={DollarSign} color="blue" />
-                        <ScoreCard title="Environmental" score={outputs?.scores?.environmental || 0} icon={Leaf} color="green" />
-                        <ScoreCard title="Strategic" score={outputs?.scores?.strategic || 0} icon={TrendingUp} color="amber" />
-                        <ScoreCard title="Overall Score" score={outputs?.scores?.overall || 0} icon={Zap} isMain />
+                        <ScoreCard title="Economic" score={outputs?.scores?.economic || 0} icon={DollarSign} color="blue" tooltipText="Index: normalized score 0–100. See Methodology & assumptions for details." />
+                        <ScoreCard title="Environmental" score={outputs?.scores?.environmental || 0} icon={Leaf} color="green" tooltipText="Index: normalized score 0–100. Environmental outputs are proxies for directional comparison." />
+                        <ScoreCard title="Strategic" score={outputs?.scores?.strategic || 0} icon={TrendingUp} color="amber" tooltipText="Index: normalized score 0–100. See Methodology & assumptions for details." />
+                        <ScoreCard title="Overall Score" score={outputs?.scores?.overall || 0} icon={Zap} isMain tooltipText="Composite index normalized to 0–100. See Methodology & assumptions for details." />
                     </div>
 
                     {/* Row 2: Projection Charts & Heatmap - stack on mobile/tablet, 3 cols on lg+ */}
@@ -246,6 +255,12 @@ const ClimateSimulator = () => {
                                 title="Revenue"
                                 dataKeyA="revenue_a"
                                 dataKeyB="revenue_b"
+                                labelA="Scenario A"
+                                labelB="Scenario B"
+                                showLineA={chartShowA}
+                                showLineB={chartShowB}
+                                onToggleA={setChartShowA}
+                                onToggleB={setChartShowB}
                             />
                         </div>
                         <div className="lg:col-span-4 min-h-[260px] sm:min-h-[300px] lg:min-h-[340px] glass-panel rounded-xl animate-fade-in shadow-xl" style={{ animationDelay: '0.2s' }}>
@@ -254,6 +269,12 @@ const ClimateSimulator = () => {
                                 title="Net Profit"
                                 dataKeyA="profit_a"
                                 dataKeyB="profit_b"
+                                labelA="Scenario A"
+                                labelB="Scenario B"
+                                showLineA={chartShowA}
+                                showLineB={chartShowB}
+                                onToggleA={setChartShowA}
+                                onToggleB={setChartShowB}
                             />
                         </div>
                         <div className="md:col-span-2 lg:col-span-4 min-h-[220px] sm:min-h-[260px] lg:min-h-[340px] glass-panel rounded-xl animate-fade-in shadow-xl" style={{ animationDelay: '0.3s' }}>
@@ -266,7 +287,7 @@ const ClimateSimulator = () => {
                         <div className="lg:col-span-12 glass-panel rounded-xl animate-fade-in overflow-hidden relative shadow-lg min-h-0" style={{ animationDelay: '0.4s' }}>
                             <div className="grid grid-cols-1 lg:grid-cols-12 h-full min-h-[360px] lg:min-h-0">
                                 <div className="lg:col-span-8 border-b lg:border-b-0 lg:border-r border-slate-200 min-h-[280px]">
-                                    <DeepMetricsPanel details={outputs?.details} />
+                                    <DeepMetricsPanel details={outputs?.details} keyDrivers={outputs?.key_drivers} />
                                 </div>
                                 <div className="lg:col-span-4 flex flex-col min-h-[240px]">
                                     <div className="flex-1 min-h-[120px] border-b border-slate-200 overflow-hidden">
@@ -283,6 +304,16 @@ const ClimateSimulator = () => {
 
                 </div>
             </div>
+
+            {/* Footer with Methodology link */}
+            <footer className="flex-none border-t border-slate-200 bg-slate-50/80 px-4 py-3 flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-[10px] sm:text-xs text-slate-600">
+                <button type="button" onClick={() => setMethodologyOpen(true)} className="font-bold uppercase tracking-widest text-teal-600 hover:text-teal-700 hover:underline">
+                    Methodology & assumptions
+                </button>
+                <span className="font-semibold">SME Resilience Simulator V2 — Scenario-driven financial analysis</span>
+            </footer>
+
+            <MethodologyPanel isOpen={methodologyOpen} onClose={() => setMethodologyOpen(false)} />
 
             <style jsx>{`
                 .input-field {

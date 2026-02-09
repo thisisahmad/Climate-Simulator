@@ -1,4 +1,4 @@
-# Sustaine - SME Resilience Simulator 🌱
+# SME Resilience Simulator V2
 
 A modern full-stack web application for simulating SME resilience and sustainability outcomes. Built with **React** (Frontend) and **FastAPI** (Backend).  
 **Metrics reference**: See [METRICS_DOCUMENTATION.md](./METRICS_DOCUMENTATION.md) for client-updated inputs and outputs.

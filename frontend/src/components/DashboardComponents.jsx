@@ -14,15 +14,36 @@ import {
     Tooltip,
     Legend
 } from 'recharts';
-import { AlertTriangle, Info, CheckCircle, XCircle } from 'lucide-react';
+import { AlertTriangle, Info, CheckCircle, CheckCircle2, XCircle, X } from 'lucide-react';
 
-export const SliderControl = ({ label, value, min = 0, max = 100, step = 1, onChange, suffix = "", compact = false }) => (
+const MetricTooltip = ({ text, id }) => {
+    const [show, setShow] = React.useState(false);
+    return (
+        <span className="relative inline-flex ml-0.5">
+            <button type="button" aria-label="Info" onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)} className="text-slate-400 hover:text-teal-600 focus:outline-none">
+                <Info className="w-3 h-3" />
+            </button>
+            {show && (
+                <span className="absolute left-0 top-6 z-50 w-48 sm:w-56 p-2 text-[10px] font-medium text-slate-700 bg-white border border-slate-200 rounded-lg shadow-lg" role="tooltip">
+                    {text}
+                </span>
+            )}
+        </span>
+    );
+};
+
+export const SliderControl = ({ label, value, min = 0, max = 100, step = 1, onChange, suffix = "", compact = false, showNumericInput = false, numericValue, onNumericChange }) => (
     <div className="group w-full">
-        <div className={`flex justify-between ${compact ? 'mb-2' : 'mb-3'}`}>
+        <div className={`flex justify-between items-center gap-2 ${compact ? 'mb-2' : 'mb-3'}`}>
             <label className={`${compact ? 'text-[11px]' : 'text-xs'} font-bold text-slate-600 uppercase tracking-[0.15em] group-hover:text-teal-600 transition-colors`}>
                 {label} {suffix && <span className="text-[10px] text-slate-500 ml-1">{suffix}</span>}
             </label>
-            <span className={`${compact ? 'text-[11px]' : 'text-sm'} font-black text-teal-600 tabular-nums`}>{Math.round(value)}</span>
+            <div className="flex items-center gap-1.5 shrink-0">
+                {showNumericInput && onNumericChange != null && (
+                    <input type="number" min={min} max={max} step={step} value={numericValue ?? value} onChange={(e) => onNumericChange(parseFloat(e.target.value) || 0)} className="w-12 sm:w-14 text-right rounded border border-slate-300 px-1.5 py-0.5 text-[11px] font-bold text-teal-600 focus:border-teal-500 focus:ring-1 focus:ring-teal-500" />
+                )}
+                {!showNumericInput && <span className={`${compact ? 'text-[11px]' : 'text-sm'} font-black text-teal-600 tabular-nums`}>{Math.round(value)}</span>}
+            </div>
         </div>
         <div className="relative flex items-center min-h-[44px] py-2 sm:py-0 sm:h-6">
             <input
@@ -77,7 +98,7 @@ export const SliderControl = ({ label, value, min = 0, max = 100, step = 1, onCh
     </div>
 );
 
-export const ScoreCard = ({ title, score, icon: Icon, isMain = false, color = "blue" }) => {
+export const ScoreCard = ({ title, score, icon: Icon, isMain = false, color = "blue", tooltipText }) => {
     const getGradient = () => {
         if (isMain) return "from-teal-600 to-teal-700";
         if (color === "blue") return "from-amber-500 to-orange-600";
@@ -96,7 +117,9 @@ export const ScoreCard = ({ title, score, icon: Icon, isMain = false, color = "b
             <div className="absolute top-0 right-0 w-16 h-16 sm:w-24 sm:h-24 bg-gradient-to-br from-slate-100 to-transparent rounded-full -mr-6 -mt-6 sm:-mr-8 sm:-mt-8 pointer-events-none"></div>
 
             <div className="flex justify-between w-full items-start z-10">
-                <h3 className={`text-[9px] sm:text-[10px] lg:text-[11px] font-bold uppercase tracking-[0.15em] sm:tracking-[0.25em] truncate max-w-[70%] ${isMain ? 'text-teal-700' : 'text-slate-600'}`}>{title}</h3>
+                <h3 className={`text-[9px] sm:text-[10px] lg:text-[11px] font-bold uppercase tracking-[0.15em] sm:tracking-[0.25em] truncate max-w-[70%] flex items-center gap-0.5 ${isMain ? 'text-teal-700' : 'text-slate-600'}`}>
+                    {title} {tooltipText && <MetricTooltip text={tooltipText} />}
+                </h3>
                 {Icon && <Icon className={`w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0 ${isMain ? 'text-teal-600' : 'text-slate-500'}`} />}
             </div>
 
@@ -239,14 +262,37 @@ const formatMetric = (value, unit) => {
     return Number(value).toFixed(1);
 };
 
-export const DeepMetricsPanel = ({ details }) => {
+const KeyDriversSnippet = ({ drivers }) => {
+    if (!drivers || drivers.length === 0) return null;
+    return (
+        <p className="text-[9px] text-slate-500 mt-1 leading-tight">Key drivers: {drivers.slice(0, 3).join(', ')}</p>
+    );
+};
+
+export const DeepMetricsPanel = ({ details, keyDrivers }) => {
     if (!details) return null;
 
-    const MetricBox = ({ label, value, unit, color }) => (
+    const MetricBox = ({ label, value, unit, color, tooltipText }) => (
         <div className="bg-slate-50 rounded-lg p-2 sm:p-3 border border-slate-200 flex flex-col items-center justify-center text-center group hover:bg-slate-100 transition-colors min-w-0">
-            <span className="text-[7px] sm:text-[8px] uppercase font-bold text-slate-600 tracking-[0.15em] sm:tracking-[0.2em] mb-0.5 sm:mb-1 group-hover:text-slate-700 truncate w-full">{label}</span>
+            <span className="text-[7px] sm:text-[8px] uppercase font-bold text-slate-600 tracking-[0.15em] sm:tracking-[0.2em] mb-0.5 sm:mb-1 group-hover:text-slate-700 truncate w-full flex items-center justify-center gap-0.5">
+                {label} {tooltipText && <MetricTooltip text={tooltipText} />}
+            </span>
             <div className={`text-sm sm:text-base lg:text-lg font-black ${color || 'text-slate-800'} tabular-nums leading-none`}>
                 {formatMetric(value, unit)}<span className="text-[8px] sm:text-[9px] ml-0.5 font-bold text-slate-500">{unit}</span>
+            </div>
+        </div>
+    );
+
+    const MetricWithDrivers = ({ label, value, unit, color, tooltipText, drivers }) => (
+        <div className="min-w-0">
+            <div className="bg-slate-50 rounded-lg p-2 sm:p-3 border border-slate-200 flex flex-col items-center justify-center text-center group hover:bg-slate-100 transition-colors">
+                <span className="text-[7px] sm:text-[8px] uppercase font-bold text-slate-600 tracking-[0.15em] sm:tracking-[0.2em] mb-0.5 sm:mb-1 flex items-center justify-center gap-0.5">
+                    {label} {tooltipText && <MetricTooltip text={tooltipText} />}
+                </span>
+                <div className={`text-sm sm:text-base lg:text-lg font-black ${color || 'text-slate-800'} tabular-nums leading-none`}>
+                    {formatMetric(value, unit)}<span className="text-[8px] sm:text-[9px] ml-0.5 font-bold text-slate-500">{unit}</span>
+                </div>
+                <KeyDriversSnippet drivers={drivers} />
             </div>
         </div>
     );
@@ -256,15 +302,16 @@ export const DeepMetricsPanel = ({ details }) => {
             <h3 className="text-[9px] sm:text-[11px] font-bold text-slate-700 uppercase tracking-[0.2em] mb-2 sm:mb-4">Deep Dive Indicators (19)</h3>
 
             <div className="flex-1 overflow-y-auto grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 customized-scrollbar pr-1">
-                {/* Finance (7) */}
+                {/* Finance */}
                 <div>
                     <h4 className="text-[8px] sm:text-[9px] font-bold text-blue-700 uppercase mb-1 sm:mb-2 tracking-[0.2em] border-l-4 border-blue-500 pl-2">Finance</h4>
                     <div className="grid grid-cols-1 gap-1.5">
-                        <MetricBox label="ROI" value={details.roi_percent} unit="%" color={details.roi_percent > 0 ? "text-emerald-400" : "text-rose-400"} />
-                        <MetricBox label="IRR" value={details.irr_percent} unit="%" />
-                        <MetricBox label="Payback" value={details.payback_years} unit="Yrs" />
+                        <MetricWithDrivers label="ROI" value={details.roi_percent} unit="%" color={details.roi_percent > 0 ? "text-emerald-400" : "text-rose-400"} drivers={keyDrivers?.roi} />
+                        <MetricWithDrivers label="IRR" value={details.irr_percent} unit="%" drivers={keyDrivers?.irr} />
+                        <MetricWithDrivers label="NPV" value={details.npv != null ? Math.round(details.npv) : null} unit="€" drivers={keyDrivers?.npv} />
+                        <MetricWithDrivers label="Payback" value={details.payback_years} unit="Yrs" drivers={keyDrivers?.payback_years} />
                         <MetricBox label="Disc. Payback" value={details.discounted_payback_years} unit="Yrs" />
-                        <MetricBox label="Break Even" value={details.break_even_year} unit="Yr" />
+                        <MetricWithDrivers label="Break Even" value={details.break_even_year} unit="Yr" drivers={keyDrivers?.break_even_year} />
                         <MetricBox label="Viability" value={details.financial_viability} unit="/100" />
                         <MetricBox label="TCO" value={details.tco_k} unit="K€" />
                     </div>
@@ -274,9 +321,9 @@ export const DeepMetricsPanel = ({ details }) => {
                 <div>
                     <h4 className="text-[8px] sm:text-[9px] font-bold text-emerald-700 uppercase mb-1 sm:mb-2 tracking-[0.2em] border-l-4 border-emerald-500 pl-2">Carbon</h4>
                     <div className="grid grid-cols-1 gap-1.5">
-                        <MetricBox label="Reduction (Proxy)" value={details.carbon_reduction_tons} unit="tCO2e" color="text-emerald-300" />
+                        <MetricBox label="Reduction (Proxy)" value={details.carbon_reduction_tons} unit="tCO2e" color="text-emerald-300" tooltipText="Estimated carbon reduction from efficiency and targets. Proxy for directional comparison, not certified reporting." />
                         <MetricBox label="Cost/Ton CO2" value={details.cost_per_ton_co2} unit="€" />
-                        <MetricBox label="Intensity (Index)" value={details.carbon_intensity_index} unit="kg/1K€" />
+                        <MetricBox label="Carbon Intensity" value={details.carbon_intensity_kg_per_1k_revenue} unit="kg CO2e/€1k" tooltipText="Index: kg CO2e per €1,000 revenue. Derived from carbon reduction proxy and revenue; for comparison only." />
                         <MetricBox label="Net Zero" value={details.net_zero_progress} unit="%" />
                     </div>
                 </div>
@@ -287,8 +334,8 @@ export const DeepMetricsPanel = ({ details }) => {
                     <div className="grid grid-cols-1 gap-1.5">
                         <MetricBox label="Energy Savings" value={details.energy_savings_mwh} unit="MWh" />
                         <MetricBox label="Water Savings" value={details.water_savings_kl} unit="KL" />
-                        <MetricBox label="Waste Diversion" value={details.waste_diversion_index} unit="%" />
-                        <MetricBox label="Res. Efficiency" value={details.resource_efficiency_index} unit="/100" />
+                        <MetricBox label="Waste Diversion" value={details.waste_diversion_index} unit="%" tooltipText="Indicative index from waste reduction and circular economy inputs, not measured quantities." />
+                        <MetricBox label="Res. Efficiency" value={details.resource_efficiency_index} unit="/100" tooltipText="Indicative index combining energy, resource, waste and circular inputs; not measured quantities." />
                     </div>
                 </div>
 
@@ -296,8 +343,8 @@ export const DeepMetricsPanel = ({ details }) => {
                 <div>
                     <h4 className="text-[8px] sm:text-[9px] font-bold text-amber-700 uppercase mb-1 sm:mb-2 tracking-[0.2em] border-l-4 border-amber-500 pl-2">Risk & ESG</h4>
                     <div className="grid grid-cols-1 gap-1.5">
-                        <MetricBox label="ESG Score" value={details.esg_score} unit="/100" />
-                        <MetricBox label="Resilience" value={details.resilience_index} unit="Idx" color="text-amber-200" />
+                        <MetricWithDrivers label="ESG Score" value={details.esg_score} unit="/100" drivers={keyDrivers?.esg_score} />
+                        <MetricBox label="Resilience" value={details.resilience_index} unit="Idx" color="text-amber-200" tooltipText="Strategic resilience index from reputation, productivity, turnover and market access; normalized 0–100." />
                         <MetricBox label="Emp. Engage" value={details.employee_engagement} unit="/100" />
                         <div className="bg-slate-50 rounded-lg p-2 sm:p-2.5 border border-slate-200 flex flex-col items-center justify-center text-center">
                             <span className="text-[7px] sm:text-[8px] uppercase font-bold text-slate-600 tracking-[0.2em] mb-0.5 sm:mb-1">Exec Risk</span>
@@ -312,7 +359,7 @@ export const DeepMetricsPanel = ({ details }) => {
     );
 };
 
-export const NumericInput = ({ label, value, onChange, prefix = "", suffix = "", type = "number", compact = false }) => (
+export const NumericInput = ({ label, value, onChange, prefix = "", suffix = "", type = "number", compact = false, step }) => (
     <div className="group w-full">
         <label className={`block ${compact ? 'text-[9px] sm:text-[10px]' : 'text-[10px] sm:text-xs'} font-bold text-slate-600 uppercase tracking-[0.15em] mb-1 sm:mb-1.5 group-hover:text-teal-600 transition-colors`}>
             {label}
@@ -321,6 +368,7 @@ export const NumericInput = ({ label, value, onChange, prefix = "", suffix = "",
             {prefix && <span className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 text-slate-500 font-bold text-[10px] sm:text-[11px]">{prefix}</span>}
             <input
                 type={type}
+                step={step}
                 value={type === "number" ? Math.round(value) : value}
                 onChange={(e) => onChange(type === "number" ? Math.round(parseFloat(e.target.value)) || 0 : e.target.value)}
                 className={`w-full rounded-lg min-h-[44px] sm:min-h-0 border ${compact ? 'py-2 sm:py-1.5' : 'py-2.5'} ${prefix ? 'pl-6 sm:pl-7' : 'pl-3'} pr-7 sm:pr-8 text-[11px] font-bold text-slate-800 outline-none transition-all bg-white border-slate-300 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 placeholder:text-slate-400`}
@@ -330,7 +378,7 @@ export const NumericInput = ({ label, value, onChange, prefix = "", suffix = "",
     </div>
 );
 
-export const ProjectionChart = ({ data, title, dataKeyA, dataKeyB, labelA = "Traditional", labelB = "Sustainable", prefix = "" }) => {
+export const ProjectionChart = ({ data, title, dataKeyA, dataKeyB, labelA = "Scenario A", labelB = "Scenario B", prefix = "", showLineA = true, showLineB = true, onToggleA, onToggleB }) => {
     if (!data || data.length === 0) return null;
 
     const formatYAxis = (tickItem) => {
@@ -341,7 +389,23 @@ export const ProjectionChart = ({ data, title, dataKeyA, dataKeyB, labelA = "Tra
 
     return (
         <div className="h-full w-full flex flex-col p-2 sm:p-4 min-h-0">
-            <h3 className="text-[10px] sm:text-[12px] font-bold text-slate-700 uppercase tracking-[0.2em] sm:tracking-[0.25em] mb-2 sm:mb-4 flex-shrink-0">{title}</h3>
+            <div className="flex items-center justify-between gap-2 mb-2 sm:mb-4 flex-shrink-0">
+                <h3 className="text-[10px] sm:text-[12px] font-bold text-slate-700 uppercase tracking-[0.2em] sm:tracking-[0.25em]">{title}</h3>
+                <div className="flex items-center gap-2 text-[9px] font-bold uppercase tracking-wider">
+                    {onToggleA && (
+                        <label className="flex items-center gap-1 cursor-pointer text-slate-600">
+                            <input type="checkbox" checked={showLineA !== false} onChange={(e) => onToggleA(e.target.checked)} className="rounded border-slate-400 text-teal-600 focus:ring-teal-500" />
+                            <span style={{ color: '#64748b' }}>{labelA}</span>
+                        </label>
+                    )}
+                    {onToggleB && (
+                        <label className="flex items-center gap-1 cursor-pointer text-slate-600">
+                            <input type="checkbox" checked={showLineB !== false} onChange={(e) => onToggleB(e.target.checked)} className="rounded border-slate-400 text-teal-600 focus:ring-teal-500" />
+                            <span style={{ color: '#0d9488' }}>{labelB}</span>
+                        </label>
+                    )}
+                </div>
+            </div>
             <div className="flex-1 w-full min-h-[180px] sm:min-h-[220px]">
                 <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={data} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
@@ -376,27 +440,60 @@ export const ProjectionChart = ({ data, title, dataKeyA, dataKeyB, labelA = "Tra
                             iconType="circle"
                             wrapperStyle={{ fontSize: '9px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em' }}
                         />
-                        <Line
-                            type="monotone"
-                            dataKey={dataKeyA}
-                            name={labelA}
-                            stroke="#64748b"
-                            strokeWidth={2}
-                            dot={{ fill: '#475569', r: 3 }}
-                            activeDot={{ r: 5, strokeWidth: 0 }}
-                        />
-                        <Line
-                            type="monotone"
-                            dataKey={dataKeyB}
-                            name={labelB}
-                            stroke="#0d9488"
-                            strokeWidth={2}
-                            dot={{ fill: '#0f766e', r: 3 }}
-                            activeDot={{ r: 5, strokeWidth: 0 }}
-                            animationDuration={1500}
-                        />
+                        {showLineA !== false && (
+                            <Line
+                                type="monotone"
+                                dataKey={dataKeyA}
+                                name={labelA}
+                                stroke="#64748b"
+                                strokeWidth={2}
+                                dot={{ fill: '#475569', r: 3 }}
+                                activeDot={{ r: 5, strokeWidth: 0 }}
+                            />
+                        )}
+                        {showLineB !== false && (
+                            <Line
+                                type="monotone"
+                                dataKey={dataKeyB}
+                                name={labelB}
+                                stroke="#0d9488"
+                                strokeWidth={2}
+                                dot={{ fill: '#0f766e', r: 3 }}
+                                activeDot={{ r: 5, strokeWidth: 0 }}
+                                animationDuration={1500}
+                            />
+                        )}
                     </LineChart>
                 </ResponsiveContainer>
+            </div>
+        </div>
+    );
+};
+
+export const MethodologyPanel = ({ isOpen, onClose }) => {
+    if (!isOpen) return null;
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50" onClick={onClose}>
+            <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[85vh] overflow-y-auto customized-scrollbar p-6 sm:p-8" onClick={(e) => e.stopPropagation()}>
+                <div className="flex justify-between items-start mb-6">
+                    <h2 className="text-lg sm:text-xl font-black text-slate-800 uppercase tracking-wider">Methodology & assumptions</h2>
+                    <button type="button" onClick={onClose} className="p-1 rounded-lg hover:bg-slate-100 text-slate-500" aria-label="Close">
+                        <X className="w-5 h-5" />
+                    </button>
+                </div>
+                <p className="text-sm font-semibold text-slate-700 mb-6 leading-relaxed">
+                    Environmental outputs are proxies intended for directional comparison, not certified reporting.
+                </p>
+                <h3 className="text-xs font-black text-slate-600 uppercase tracking-widest mb-3">Key default assumptions</h3>
+                <ul className="list-disc list-inside space-y-2 text-sm text-slate-700 mb-6">
+                    <li>Energy cost share default: 20% of OPEX</li>
+                    <li>Electricity price default: €0.15/kWh</li>
+                    <li>Water intensity default: 1 L per €1 revenue (manufacturing baseline) unless otherwise specified</li>
+                    <li>Waste proxy and resource efficiency are indicative indices, not measured quantities</li>
+                </ul>
+                <p className="text-sm text-slate-600">
+                    Score outputs are normalized and clamped to a 0–100 range.
+                </p>
             </div>
         </div>
     );

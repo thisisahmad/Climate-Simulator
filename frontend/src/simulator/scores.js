@@ -14,13 +14,16 @@ function clamp(val) {
  * @returns {{ economic: number, environmental: number, strategic: number, overall: number }}
  */
 export function calculateScores(i, projections) {
-  const totalProfitB = projections.reduce((s, p) => s + p.profit_b, 0);
-  const totalSavings = projections.reduce((s, p) => s + p.savings, 0);
-  const totalInv =
-    i.initial_capex +
-    i.sustainability_capex +
-    projections.reduce((s, p) => s + p.revenue_b, 0) * i.reinvest_pct;
-  const roi = totalInv > 0 ? (totalProfitB + totalSavings) / totalInv : 0;
+  const totalIncrementalInv = (() => {
+    if (!projections.length) return i.sustainability_capex;
+    const last = projections[projections.length - 1];
+    return Math.max(0, (last.cumulative_investment || 0) - (i.initial_capex || 0));
+  })();
+  const cumulativeIncrementalProfit = projections.reduce(
+    (s, p) => s + (p.profit_b - p.profit_a),
+    0
+  );
+  const roi = totalIncrementalInv > 0 ? cumulativeIncrementalProfit / totalIncrementalInv : 0;
   const econScore = clamp(Math.round(50 + roi * 20));
 
   const efficiencyContrib =
