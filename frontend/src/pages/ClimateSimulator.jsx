@@ -94,17 +94,17 @@ const ClimateSimulator = () => {
                 </div>
             </div>
 
-            {/* -- Main Content -- */}
+            {/* -- Main Content -- On mobile: single column, full page scroll so charts are visible below. On lg: side-by-side. */}
             <div className="flex-1 min-h-0 flex flex-col lg:flex-row gap-2 p-2 sm:p-3 overflow-y-auto overflow-x-hidden">
 
-                {/* -- Left Panel: Inputs -- */}
-                <div className="w-full lg:w-[380px] lg:flex-none flex flex-col glass-panel rounded-xl overflow-hidden shadow-2xl lg:max-h-[calc(100vh-5rem)]">
-                    <div className="px-4 sm:px-5 py-3 sm:py-4 border-b border-slate-200 flex items-center gap-3 bg-slate-50">
+                {/* -- Left Panel: Inputs -- On mobile: max height so Results can appear sooner when scrolling. */}
+                <div className="w-full lg:w-[380px] flex-none lg:flex-none flex flex-col glass-panel rounded-xl overflow-hidden shadow-2xl max-h-[65vh] sm:max-h-[70vh] lg:max-h-[calc(100vh-5rem)] shrink-0">
+                    <div className="px-4 sm:px-5 py-3 sm:py-4 border-b border-slate-200 flex items-center gap-3 bg-slate-50 flex-shrink-0">
                         <Settings className="w-4 h-4 sm:w-5 sm:h-5 text-teal-600 flex-shrink-0" />
                         <h2 className="text-[11px] sm:text-[12px] font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] text-slate-700">Parameters</h2>
                     </div>
 
-                    <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4 sm:py-6 space-y-6 sm:space-y-8 customized-scrollbar max-h-[60vh] lg:max-h-none">
+                    <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4 sm:py-6 space-y-6 sm:space-y-8 customized-scrollbar min-h-0">
 
                         {/* 1. General Info */}
                         <div className="space-y-4">
@@ -230,8 +230,8 @@ const ClimateSimulator = () => {
                     </div>
                 </div>
 
-                {/* -- Right Panel: Results -- */}
-                <div className="flex-1 flex flex-col gap-3 min-h-0 min-w-0 overflow-y-auto overflow-x-hidden customized-scrollbar lg:max-h-[calc(100vh-5rem)]">
+                {/* -- Right Panel: Results -- On mobile: flex-none = natural height so scorecards + charts + metrics all in scroll flow. On lg: flex-1 + scroll. */}
+                <div id="results" className="flex-none lg:flex-1 flex flex-col gap-3 min-h-0 min-w-0 overflow-y-auto overflow-x-hidden customized-scrollbar lg:max-h-[calc(100vh-5rem)]">
                     {/* Methodology link - top right of results */}
                     <div className="flex justify-end flex-none">
                         <button type="button" onClick={() => setMethodologyOpen(true)} className="flex items-center gap-1.5 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-teal-600 hover:text-teal-700 hover:underline">
@@ -247,9 +247,9 @@ const ClimateSimulator = () => {
                         <ScoreCard title="Overall Score" score={outputs?.scores?.overall || 0} icon={Zap} isMain tooltipText="Composite index normalized to 0–100. See Methodology & assumptions for details." />
                     </div>
 
-                    {/* Row 2: Projection Charts & Heatmap - stack on mobile/tablet, 3 cols on lg+ */}
+                    {/* Row 2: Projection Charts & Heatmap - stack on mobile with fixed height so graphs visible */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-2 sm:gap-3 flex-none">
-                        <div className="lg:col-span-4 min-h-[260px] sm:min-h-[300px] lg:min-h-[340px] glass-panel rounded-xl animate-fade-in shadow-xl" style={{ animationDelay: '0.1s' }}>
+                        <div className="lg:col-span-4 min-h-[280px] sm:min-h-[300px] lg:min-h-[340px] glass-panel rounded-xl animate-fade-in shadow-xl" style={{ animationDelay: '0.1s' }}>
                             <ProjectionChart
                                 data={outputs?.projections}
                                 title="Revenue"
@@ -277,7 +277,7 @@ const ClimateSimulator = () => {
                                 onToggleB={setChartShowB}
                             />
                         </div>
-                        <div className="md:col-span-2 lg:col-span-4 min-h-[220px] sm:min-h-[260px] lg:min-h-[340px] glass-panel rounded-xl animate-fade-in shadow-xl" style={{ animationDelay: '0.3s' }}>
+                        <div className="md:col-span-2 lg:col-span-4 min-h-[260px] sm:min-h-[280px] lg:min-h-[340px] glass-panel rounded-xl animate-fade-in shadow-xl" style={{ animationDelay: '0.3s' }}>
                             <ImpactHeatmap cells={outputs?.heatmap} />
                         </div>
                     </div>

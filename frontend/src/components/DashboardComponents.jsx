@@ -406,7 +406,7 @@ export const ProjectionChart = ({ data, title, dataKeyA, dataKeyB, labelA = "Sce
                     )}
                 </div>
             </div>
-            <div className="flex-1 w-full min-h-[180px] sm:min-h-[220px]">
+            <div className="w-full h-[220px] sm:h-[260px] lg:min-h-[220px] lg:h-full">
                 <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={data} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
                         <CartesianGrid strokeDasharray="3 3" stroke="#cbd5e1" vertical={false} />

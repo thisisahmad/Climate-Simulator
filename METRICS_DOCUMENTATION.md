@@ -65,6 +65,8 @@ This document provides a comprehensive list of all input parameters (Left Sideba
 | **Depreciation Years** | Number | Asset depreciation period | 5 Years |
 | **Inflation Rate** | Number (0-100%) | Annual inflation rate | 2% |
 
+**Inputs and display:** Every percentage slider has a numeric input box for precise entry. Percent sliders use step 1%; monetary fields use sensible steps (e.g. 100 or 500). Currency is displayed with auto-scaling (€, K€, M€); energy as kWh or MWh; water as L or m³ where appropriate. Display formatting only; internal values are unchanged.
+
 ---
 
 ## 📊 OUTPUT CALCULATIONS (Right Side Results)
@@ -79,14 +81,15 @@ This document provides a comprehensive list of all input parameters (Left Sideba
 
 ### Deep Dive Indicators
 
-#### 📈 FINANCE Section (7 Metrics)
+#### 📈 FINANCE Section (8 Metrics)
 
 | Metric | Description | Unit | Status |
 |--------|-------------|------|--------|
-| **ROI** | Return on Investment percentage | % | Original |
-| **IRR** | Internal Rate of Return | % | **NEW** |
-| **Payback** | Simple payback period | Years | Original |
-| **Disc. Payback** | Discounted payback period | Years | **NEW** |
+| **ROI** | Return on Investment (incremental only; see formula) | % | Updated |
+| **IRR** | Internal Rate of Return (incremental cash flows) | % | **NEW** |
+| **NPV** | Net Present Value (incremental; see formula) | € | **NEW** |
+| **Payback** | Simple payback period (incremental gain vs investment) | Years | Updated |
+| **Disc. Payback** | Discounted payback period (incremental DCF) | Years | **NEW** |
 | **Break Even** | Year when Scenario B exceeds Scenario A | Year | **NEW** |
 | **Viability** | Financial viability score (NPV normalized) | /100 | Original |
 | **TCO** | Total Cost of Ownership | K€ | **NEW** |
@@ -97,7 +100,7 @@ This document provides a comprehensive list of all input parameters (Left Sideba
 |--------|-------------|------|--------|
 | **Reduction (Proxy)** | Estimated carbon reduction - synthetic proxy for directional comparison | tCO2e | Original |
 | **Cost/Ton CO2** | Cost efficiency per ton of CO2 reduced | € | **NEW** |
-| **Intensity (Index)** | Carbon intensity index per revenue unit - normalized for comparison | kg/1K€ | **NEW** |
+| **Carbon Intensity** | kg CO2e per €1,000 revenue (index for comparison; see formula below) | kg CO2e/€1k | **NEW** |
 | **Net Zero** | Net zero progress percentage | % | Original |
 
 #### ⚡ EFFICIENCY Section (4 Metrics) *(NEW SECTION)*
@@ -119,8 +122,9 @@ This document provides a comprehensive list of all input parameters (Left Sideba
 | **Exec Risk** | Execution risk factor | High/Med/Low | Original |
 
 ### Projection Charts
-- **Revenue Projection**: Annual revenue comparison (Traditional vs Sustainable)
-- **Net Profit Projection**: Annual profit comparison (Traditional vs Sustainable)
+- **Revenue Projection**: Annual revenue comparison (Scenario A vs Scenario B)
+- **Net Profit Projection**: Annual profit comparison (Scenario A vs Scenario B)
+- Charts use consistent labels **Scenario A** (traditional) and **Scenario B** (sustainable), with a persistent legend and toggles to show/hide each scenario. Scenario A and B use consistent colors across all views.
 
 ### Impact Matrix
 A 3x3 matrix showing:
@@ -156,20 +160,25 @@ Several environmental and efficiency metrics in this simulator are **synthetic p
 - **Energy Savings (Proxy)**: Estimated based on efficiency percentage and OPEX assumptions. Uses simplified assumptions (energy costs as 20% of OPEX, average €0.15/kWh).
 - **Water Savings (Proxy)**: Based on fixed assumption (1L per €1 revenue for manufacturing) multiplied by resource efficiency. This is a directional estimate, not actual water usage measurement.
 - **Waste Diversion (Index)**: Calculated from linear combinations of waste reduction and circular economy percentages. This is an index-based metric for comparison, not actual waste diversion tracking.
-- **Carbon Intensity (Index)**: A normalized index metric for comparison purposes.
+- **Carbon Intensity**: kg CO2e per €1,000 revenue; index for comparison (see formula in §5).
 - **Resource Efficiency Index**: A composite index combining multiple efficiency factors.
 
 *These metrics are intentionally simplified to enable scenario comparison and decision support. They should be interpreted as directional indicators rather than precise measurements.*
 
-#### 2. Scoring Calibration
+#### 2. Environmental Outputs Are Proxies
 
-The Economic, Environmental, Strategic, and Overall scores use **weighted combinations and clamping to 0-100 ranges**. These are:
+**Environmental outputs are proxies intended for directional comparison, not certified reporting.** Use them for scenario comparison and decision support, not as audited or regulatory figures.
 
-- **Design calibrations** for interpretability and decision support
-- **Not empirically derived constants** from academic research
-- **Adjustable** for different contexts and use cases
+#### 3. Key Default Assumptions
 
-Current weights: Economic (40%), Environmental (30%), Strategic (30%). These reflect the model's decision-support purpose and can be modified to emphasize different priorities in different contexts.
+- **Energy cost share default:** 20% of OPEX  
+- **Electricity price default:** €0.15/kWh  
+- **Water intensity default:** 1 L per €1 revenue (manufacturing baseline) unless otherwise specified  
+- **Waste proxy and resource efficiency** are indicative indices, not measured quantities  
+
+#### 4. Scoring Calibration
+
+**Score outputs are normalized and clamped to a 0–100 range.** The Economic, Environmental, Strategic, and Overall scores use weighted combinations and this clamping. They are design calibrations for interpretability and decision support, not empirically derived constants. Current weights: Economic (40%), Environmental (30%), Strategic (30%). Adjustable for different contexts.
 
 ### How Inputs Affect Outputs - Calculation Flow
 
@@ -222,41 +231,49 @@ Profit_B = EBIT_B - Tax_B
 ```
 *How it changes: Higher efficiency gains → More savings → Higher profit. Higher tax rate → Lower profit*
 
-### 4. Financial Metrics Calculations
+### 4. Financial Metrics Calculations (Incremental Only)
+
+All financial metrics use **incremental** cash flows: **Profit_B − Profit_A** only. Savings are already included in Profit_B, so they are **not** added again (avoids double-counting).
+
+**Total Incremental Investment** (B vs A):
+```
+Total_Incremental_Investment = Sustainability CAPEX + Cumulative Reinvestments over horizon
+                             = (Cumulative_Investment_B at end of horizon) − Initial CAPEX
+```
 
 #### ROI (Return on Investment)
 ```
-ROI = (Cumulative Net Profit_B + Cumulative Savings) / Total Investment × 100
-Total Investment = Initial CAPEX + Sustainability CAPEX + Cumulative Reinvestments
+ROI = Cumulative(Profit_B − Profit_A) / Total_Incremental_Investment × 100
 ```
-*How it changes: Higher sustainability CAPEX initially lowers ROI, but higher efficiency gains and revenue growth improve it over time*
+*Do NOT add "Cumulative Savings" separately; savings are already embedded in Profit_B.*  
+*How it changes: Higher sustainability CAPEX initially lowers ROI; higher efficiency and revenue growth improve incremental profit and ROI.*
 
-#### IRR (Internal Rate of Return) **NEW**
+#### IRR (Internal Rate of Return)
 ```
-IRR = Rate where NPV = 0
-NPV = -Initial Investment + Σ(Cash Flow_t / (1 + IRR)^t) = 0
+IRR = rate r where NPV(r) = 0
+NPV(r) = −Total_Incremental_Investment + Σ [ (Profit_B − Profit_A) / (1 + r)^t ] = 0
 ```
-*How it changes: Higher incremental cash flows (difference between Scenario B and A) → Higher IRR*
+*How it changes: Higher incremental cash flows (Profit_B − Profit_A) → Higher IRR.*
 
 #### NPV (Net Present Value)
 ```
-NPV = -Sustainability CAPEX + Σ[(Profit_B + Savings - Profit_A) / (1 + Discount Rate)^t]
+NPV = −Total_Incremental_Investment + Σ [ (Profit_B − Profit_A) / (1 + Discount Rate)^t ]
 ```
-*How it changes: Lower discount rate → Higher NPV. Higher efficiency gains → Higher incremental cash flows → Higher NPV*
+*Do NOT add "Savings" separately; they are already in Profit_B.*  
+*How it changes: Lower discount rate → Higher NPV. Higher efficiency gains → Higher incremental cash flows → Higher NPV.*
 
 #### Payback Period
 ```
-Payback = Year when Cumulative Gain ≥ Sustainability CAPEX
-Gain per year = (Profit_B + Savings) - Profit_A
+Payback = First year when Cumulative(Profit_B − Profit_A) ≥ Total_Incremental_Investment
 ```
-*How it changes: Higher efficiency gains → Faster payback. Higher sustainability CAPEX → Longer payback*
+*How it changes: Higher efficiency gains → Faster payback. Higher Total_Incremental_Investment → Longer payback.*
 
-#### Discounted Payback Period **NEW**
+#### Discounted Payback Period
 ```
-Discounted Payback = Year when Cumulative Discounted Cash Flow ≥ Initial Investment
-Discounted CF = (Profit_B + Savings - Profit_A) / (1 + Discount Rate)^t
+Discounted Payback = First year when Cumulative DCF ≥ Total_Incremental_Investment
+Discounted CF_t = (Profit_B − Profit_A)_t / (1 + Discount Rate)^t
 ```
-*How it changes: Accounts for time value of money, always longer than simple payback*
+*How it changes: Accounts for time value of money; typically longer than simple payback.*
 
 #### Break-Even Year **NEW**
 ```
@@ -285,13 +302,13 @@ Cost/Ton CO2 = Sustainability CAPEX / Carbon Reduction (tons)
 ```
 *How it changes: Lower sustainability CAPEX or higher carbon reduction → Better cost efficiency*
 
-#### Carbon Intensity (Index) **NEW**
+#### Carbon Intensity (kg CO2e per €1,000 revenue)
 ```
-Carbon Intensity = (Carbon Reduction / Total Revenue) × 1000
+Carbon Intensity (kg/€1k) = (Carbon Reduction_tCO2e × 1000) / (Total Revenue_B / 1000)
 ```
-Units: kg CO2 per €1,000 revenue
-*Note: This is a normalized index metric for comparison purposes.*
-*How it changes: Higher revenue or lower carbon → Better intensity (lower is better)*
+**Units:** kg CO2e per €1,000 revenue (kg CO2e/€1k). Carbon reduction in tons is converted to kg (×1000); revenue in € is expressed per €1k (÷1000).  
+*Note: This is an index for directional comparison, not certified reporting.*  
+*How it changes: Higher revenue or lower carbon reduction → Lower intensity (better).*
 
 #### Net Zero Progress
 ```
@@ -361,8 +378,8 @@ Strategic Score = (Reputation × 3 + Productivity × 3 + Turnover Reduction × 2
 ```
 Economic Score = 50 + (ROI × 20)
 ```
-Clamped to 0-100 range
-*How it changes: Higher ROI → Higher economic score. Directly tied to financial performance*
+ROI used here is the **incremental** ROI defined above. Clamped to 0–100 range.  
+*How it changes: Higher incremental ROI → Higher economic score.*
 
 #### Environmental Score
 ```
@@ -402,14 +419,18 @@ Overall Score = (Economic × 40%) + (Environmental × 30%) + (Strategic × 30%)
 - **Tax Rate**: Affects both lines. Higher value → Lower profit for both
 - **Sustainability CAPEX**: Affects purple line initially (depreciation), but long-term benefits from efficiency gains
 
-### 10. Real-Time Calculation Updates
+### 10. Key Drivers (Results UX)
+
+For **ROI, IRR, NPV, Payback, Break-even**, and **ESG/Strategic Score**, the app displays a short **"Key drivers"** snippet (2–4 items) under each headline value. These are computed by a lightweight sensitivity approach: each major input (e.g. Sustainability CAPEX, revenue growth, energy efficiency, discount rate) is nudged by +5% one at a time; the absolute impact on the output is measured and the top drivers are shown. This helps users understand *why* the results look the way they do.
+
+### 11. Real-Time Calculation Updates
 
 When you adjust any input parameter in the left sidebar:
 
 1. **Immediate Recalculation**: All formulas are recalculated instantly (200ms debounce)
 2. **Graph Updates**: Both revenue and profit graphs update to show new projections
 3. **Score Updates**: All four top-level scores (Economic, Environmental, Strategic, Overall) recalculate
-4. **Deep Metrics Update**: All 19 detailed metrics in Deep Dive Indicators recalculate
+4. **Deep Metrics Update**: All 20 detailed metrics in Deep Dive Indicators (including NPV and key drivers) recalculate
 5. **Impact Matrix Update**: The 3x3 matrix updates with new Upside, Risk, and Feasibility values
 6. **Alerts Update**: System checks for new risk alerts based on updated scores
 
