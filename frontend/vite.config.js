@@ -2,9 +2,8 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 // https://vite.dev/config/
-// For GitHub Pages repo site: base = '/Climate-Simulator/'. For user site (username.github.io) use base = '/'.
+// GitHub Pages: site is at https://username.github.io/Climate-Simulator/ so base must be '/Climate-Simulator/'
 export default defineConfig({
   plugins: [react()],
-  // './' = relative paths (works for reinventinggreen.site at root). For github.io/Climate-Simulator use: VITE_BASE_PATH=/Climate-Simulator/ npm run build
-  base: process.env.VITE_BASE_PATH ?? './',
+  base: '/Climate-Simulator/',
 })

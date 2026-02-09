@@ -7,7 +7,8 @@
     "dev": "npx vite",
     "build": "npx vite build",
     "lint": "npx eslint .",
-    "preview": "npx vite preview"
+    "preview": "npx vite preview",
+    "preview:gh": "npx vite build && npx vite preview --base /Climate-Simulator/"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.1.18",
