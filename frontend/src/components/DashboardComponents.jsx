@@ -182,13 +182,13 @@ export const RadarPlot = ({ scores }) => {
     ];
 
     return (
-        <div className="h-full w-full flex flex-col min-h-[140px]">
-            <h3 className="text-[10px] sm:text-xs font-bold text-slate-600 uppercase tracking-wider mb-1 sm:mb-2 w-full text-left">Balance</h3>
-            <div className="flex-1 min-h-[120px] -ml-2 sm:-ml-4">
+        <div className="h-full w-full flex flex-col min-h-[160px] sm:min-h-[180px]">
+            <h3 className="text-xs sm:text-sm font-bold text-slate-600 uppercase tracking-wider mb-2 w-full text-left">Strategy Balance</h3>
+            <div className="flex-1 min-h-[140px] sm:min-h-[160px] -ml-2 sm:-ml-4">
                 <ResponsiveContainer width="100%" height="100%">
                     <RadarChart cx="50%" cy="50%" outerRadius="85%" data={data}>
                         <PolarGrid stroke="#94a3b8" />
-                        <PolarAngleAxis dataKey="subject" tick={{ fill: '#475569', fontSize: 9, fontWeight: 700 }} />
+                        <PolarAngleAxis dataKey="subject" tick={{ fill: '#475569', fontSize: 11, fontWeight: 700 }} />
                         <PolarRadiusAxis domain={[0, 100]} tick={false} axisLine={false} />
                         <Radar
                             name="Score"
@@ -265,7 +265,7 @@ const formatMetric = (value, unit) => {
 const KeyDriversSnippet = ({ drivers }) => {
     if (!drivers || drivers.length === 0) return null;
     return (
-        <p className="text-[9px] text-slate-500 mt-1 leading-tight">Key drivers: {drivers.slice(0, 3).join(', ')}</p>
+        <p className="text-xs text-slate-500 mt-1 leading-tight">Key drivers: {drivers.slice(0, 3).join(', ')}</p>
     );
 };
 
@@ -273,24 +273,24 @@ export const DeepMetricsPanel = ({ details, keyDrivers }) => {
     if (!details) return null;
 
     const MetricBox = ({ label, value, unit, color, tooltipText }) => (
-        <div className="bg-slate-50 rounded-lg p-2 sm:p-3 border border-slate-200 flex flex-col items-center justify-center text-center group hover:bg-slate-100 transition-colors min-w-0">
-            <span className="text-[7px] sm:text-[8px] uppercase font-bold text-slate-600 tracking-[0.15em] sm:tracking-[0.2em] mb-0.5 sm:mb-1 group-hover:text-slate-700 truncate w-full flex items-center justify-center gap-0.5">
+        <div className="bg-slate-50 rounded-lg p-3 sm:p-4 border border-slate-200 flex flex-col items-center justify-center text-center group hover:bg-slate-100 transition-colors min-w-0">
+            <span className="text-[10px] sm:text-xs uppercase font-bold text-slate-600 tracking-[0.15em] mb-1 group-hover:text-slate-700 truncate w-full flex items-center justify-center gap-0.5">
                 {label} {tooltipText && <MetricTooltip text={tooltipText} />}
             </span>
-            <div className={`text-sm sm:text-base lg:text-lg font-black ${color || 'text-slate-800'} tabular-nums leading-none`}>
-                {formatMetric(value, unit)}<span className="text-[8px] sm:text-[9px] ml-0.5 font-bold text-slate-500">{unit}</span>
+            <div className={`text-base sm:text-lg lg:text-xl font-black ${color || 'text-slate-800'} tabular-nums leading-none`}>
+                {formatMetric(value, unit)}<span className="text-[10px] sm:text-xs ml-1 font-bold text-slate-500">{unit}</span>
             </div>
         </div>
     );
 
     const MetricWithDrivers = ({ label, value, unit, color, tooltipText, drivers }) => (
         <div className="min-w-0">
-            <div className="bg-slate-50 rounded-lg p-2 sm:p-3 border border-slate-200 flex flex-col items-center justify-center text-center group hover:bg-slate-100 transition-colors">
-                <span className="text-[7px] sm:text-[8px] uppercase font-bold text-slate-600 tracking-[0.15em] sm:tracking-[0.2em] mb-0.5 sm:mb-1 flex items-center justify-center gap-0.5">
+            <div className="bg-slate-50 rounded-lg p-3 sm:p-4 border border-slate-200 flex flex-col items-center justify-center text-center group hover:bg-slate-100 transition-colors">
+                <span className="text-[10px] sm:text-xs uppercase font-bold text-slate-600 tracking-[0.15em] mb-1 flex items-center justify-center gap-0.5">
                     {label} {tooltipText && <MetricTooltip text={tooltipText} />}
                 </span>
-                <div className={`text-sm sm:text-base lg:text-lg font-black ${color || 'text-slate-800'} tabular-nums leading-none`}>
-                    {formatMetric(value, unit)}<span className="text-[8px] sm:text-[9px] ml-0.5 font-bold text-slate-500">{unit}</span>
+                <div className={`text-base sm:text-lg lg:text-xl font-black ${color || 'text-slate-800'} tabular-nums leading-none`}>
+                    {formatMetric(value, unit)}<span className="text-[10px] sm:text-xs ml-1 font-bold text-slate-500">{unit}</span>
                 </div>
                 <KeyDriversSnippet drivers={drivers} />
             </div>
@@ -298,13 +298,13 @@ export const DeepMetricsPanel = ({ details, keyDrivers }) => {
     );
 
     return (
-        <div className="h-full flex flex-col p-2 sm:p-4 overflow-hidden">
-            <h3 className="text-[9px] sm:text-[11px] font-bold text-slate-700 uppercase tracking-[0.2em] mb-2 sm:mb-4">Deep Dive Indicators (19)</h3>
+        <div className="h-full flex flex-col p-3 sm:p-4 overflow-hidden min-h-0">
+            <h3 className="text-xs sm:text-sm font-bold text-slate-700 uppercase tracking-[0.2em] mb-3 flex-shrink-0">Deep Dive Indicators (20)</h3>
 
-            <div className="flex-1 overflow-y-auto grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 customized-scrollbar pr-1">
+            <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 customized-scrollbar pr-1">
                 {/* Finance */}
                 <div>
-                    <h4 className="text-[8px] sm:text-[9px] font-bold text-blue-700 uppercase mb-1 sm:mb-2 tracking-[0.2em] border-l-4 border-blue-500 pl-2">Finance</h4>
+                    <h4 className="text-[10px] sm:text-xs font-bold text-blue-700 uppercase mb-2 tracking-[0.2em] border-l-4 border-blue-500 pl-2">Finance</h4>
                     <div className="grid grid-cols-1 gap-1.5">
                         <MetricWithDrivers label="ROI" value={details.roi_percent} unit="%" color={details.roi_percent > 0 ? "text-emerald-400" : "text-rose-400"} drivers={keyDrivers?.roi} />
                         <MetricWithDrivers label="IRR" value={details.irr_percent} unit="%" drivers={keyDrivers?.irr} />
@@ -319,7 +319,7 @@ export const DeepMetricsPanel = ({ details, keyDrivers }) => {
 
                 {/* Carbon (4) */}
                 <div>
-                    <h4 className="text-[8px] sm:text-[9px] font-bold text-emerald-700 uppercase mb-1 sm:mb-2 tracking-[0.2em] border-l-4 border-emerald-500 pl-2">Carbon</h4>
+                    <h4 className="text-[10px] sm:text-xs font-bold text-emerald-700 uppercase mb-2 tracking-[0.2em] border-l-4 border-emerald-500 pl-2">Carbon</h4>
                     <div className="grid grid-cols-1 gap-1.5">
                         <MetricBox label="Reduction (Proxy)" value={details.carbon_reduction_tons} unit="tCO2e" color="text-emerald-300" tooltipText="Estimated carbon reduction from efficiency and targets. Proxy for directional comparison, not certified reporting." />
                         <MetricBox label="Cost/Ton CO2" value={details.cost_per_ton_co2} unit="€" />
@@ -330,7 +330,7 @@ export const DeepMetricsPanel = ({ details, keyDrivers }) => {
 
                 {/* Efficiency (4) */}
                 <div>
-                    <h4 className="text-[8px] sm:text-[9px] font-bold text-cyan-700 uppercase mb-1 sm:mb-2 tracking-[0.2em] border-l-4 border-cyan-500 pl-2">Efficiency</h4>
+                    <h4 className="text-[10px] sm:text-xs font-bold text-cyan-700 uppercase mb-2 tracking-[0.2em] border-l-4 border-cyan-500 pl-2">Efficiency</h4>
                     <div className="grid grid-cols-1 gap-1.5">
                         <MetricBox label="Energy Savings" value={details.energy_savings_mwh} unit="MWh" />
                         <MetricBox label="Water Savings" value={details.water_savings_kl} unit="KL" />
@@ -341,14 +341,14 @@ export const DeepMetricsPanel = ({ details, keyDrivers }) => {
 
                 {/* Risk & ESG (4) */}
                 <div>
-                    <h4 className="text-[8px] sm:text-[9px] font-bold text-amber-700 uppercase mb-1 sm:mb-2 tracking-[0.2em] border-l-4 border-amber-500 pl-2">Risk & ESG</h4>
-                    <div className="grid grid-cols-1 gap-1.5">
+                    <h4 className="text-[10px] sm:text-xs font-bold text-amber-700 uppercase mb-2 tracking-[0.2em] border-l-4 border-amber-500 pl-2">Risk & ESG</h4>
+                    <div className="grid grid-cols-1 gap-2">
                         <MetricWithDrivers label="ESG Score" value={details.esg_score} unit="/100" drivers={keyDrivers?.esg_score} />
                         <MetricBox label="Resilience" value={details.resilience_index} unit="Idx" color="text-amber-200" tooltipText="Strategic resilience index from reputation, productivity, turnover and market access; normalized 0–100." />
                         <MetricBox label="Emp. Engage" value={details.employee_engagement} unit="/100" />
-                        <div className="bg-slate-50 rounded-lg p-2 sm:p-2.5 border border-slate-200 flex flex-col items-center justify-center text-center">
-                            <span className="text-[7px] sm:text-[8px] uppercase font-bold text-slate-600 tracking-[0.2em] mb-0.5 sm:mb-1">Exec Risk</span>
-                            <div className={`text-[9px] sm:text-[10px] font-black uppercase px-1.5 sm:px-2 py-0.5 rounded ${details.execution_risk_factor === 'High' ? 'bg-rose-100 text-rose-700 border border-rose-300' : (details.execution_risk_factor === 'Medium' ? 'bg-amber-100 text-amber-700 border border-amber-300' : 'bg-emerald-100 text-emerald-700 border border-emerald-300')}`}>
+                        <div className="bg-slate-50 rounded-lg p-3 sm:p-4 border border-slate-200 flex flex-col items-center justify-center text-center">
+                            <span className="text-[10px] sm:text-xs uppercase font-bold text-slate-600 tracking-[0.2em] mb-1">Exec Risk</span>
+                            <div className={`text-xs sm:text-sm font-black uppercase px-2 py-1 rounded ${details.execution_risk_factor === 'High' ? 'bg-rose-100 text-rose-700 border border-rose-300' : (details.execution_risk_factor === 'Medium' ? 'bg-amber-100 text-amber-700 border border-amber-300' : 'bg-emerald-100 text-emerald-700 border border-emerald-300')}`}>
                                 {details.execution_risk_factor}
                             </div>
                         </div>

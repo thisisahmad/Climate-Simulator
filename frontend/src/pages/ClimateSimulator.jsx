@@ -88,7 +88,7 @@ const ClimateSimulator = () => {
                         <Activity className="text-white w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
                     <div className="min-w-0">
-                        <h1 className="text-xs sm:text-sm font-black tracking-tighter text-white uppercase truncate">SME Resilience Simulator V2</h1>
+                        <h1 className="text-xs sm:text-sm font-black tracking-tighter text-white uppercase truncate">Green Investment Impact Simulator</h1>
                         <p className="hidden sm:block text-[9px] font-semibold text-teal-100 uppercase tracking-widest leading-none">Scenario-Driven Financial Analysis</p>
                     </div>
                 </div>
@@ -97,8 +97,8 @@ const ClimateSimulator = () => {
             {/* -- Main Content -- On mobile: single column, full page scroll so charts are visible below. On lg: side-by-side. */}
             <div className="flex-1 min-h-0 flex flex-col lg:flex-row gap-2 p-2 sm:p-3 overflow-y-auto overflow-x-hidden">
 
-                {/* -- Left Panel: Inputs -- On mobile: max height so Results can appear sooner when scrolling. */}
-                <div className="w-full lg:w-[380px] flex-none lg:flex-none flex flex-col glass-panel rounded-xl overflow-hidden shadow-2xl max-h-[65vh] sm:max-h-[70vh] lg:max-h-[calc(100vh-5rem)] shrink-0">
+                {/* -- Left Panel: Inputs -- On mobile: order-2 so Results (graphs) show first. */}
+                <div className="w-full lg:w-[380px] flex-none flex flex-col glass-panel rounded-xl overflow-hidden shadow-2xl max-h-[70vh] sm:max-h-[75vh] lg:max-h-[calc(100vh-5rem)] shrink-0 order-2 lg:order-none">
                     <div className="px-4 sm:px-5 py-3 sm:py-4 border-b border-slate-200 flex items-center gap-3 bg-slate-50 flex-shrink-0">
                         <Settings className="w-4 h-4 sm:w-5 sm:h-5 text-teal-600 flex-shrink-0" />
                         <h2 className="text-[11px] sm:text-[12px] font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] text-slate-700">Parameters</h2>
@@ -230,8 +230,8 @@ const ClimateSimulator = () => {
                     </div>
                 </div>
 
-                {/* -- Right Panel: Results -- On mobile: flex-none = natural height so scorecards + charts + metrics all in scroll flow. On lg: flex-1 + scroll. */}
-                <div id="results" className="flex-none lg:flex-1 flex flex-col gap-3 min-h-0 min-w-0 overflow-y-auto overflow-x-hidden customized-scrollbar lg:max-h-[calc(100vh-5rem)]">
+                {/* -- Right Panel: Results -- On mobile: order-1 so it appears first (graphs visible immediately). */}
+                <div id="results" className="flex-none lg:flex-1 flex flex-col gap-3 min-h-0 min-w-0 overflow-y-auto overflow-x-hidden customized-scrollbar lg:max-h-[calc(100vh-5rem)] order-1 lg:order-none">
                     {/* Methodology link - top right of results */}
                     <div className="flex justify-end flex-none">
                         <button type="button" onClick={() => setMethodologyOpen(true)} className="flex items-center gap-1.5 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-teal-600 hover:text-teal-700 hover:underline">
@@ -282,19 +282,18 @@ const ClimateSimulator = () => {
                         </div>
                     </div>
 
-                    {/* Row 3: Deep Metrics & Balance/Alerts - stack on mobile, side-by-side on lg+ */}
-                    <div className="flex-1 min-h-[400px] lg:min-h-0 grid grid-cols-1 lg:grid-cols-12 gap-2 sm:gap-3 overflow-auto">
-                        <div className="lg:col-span-12 glass-panel rounded-xl animate-fade-in overflow-hidden relative shadow-lg min-h-0" style={{ animationDelay: '0.4s' }}>
-                            <div className="grid grid-cols-1 lg:grid-cols-12 h-full min-h-[360px] lg:min-h-0">
-                                <div className="lg:col-span-8 border-b lg:border-b-0 lg:border-r border-slate-200 min-h-[280px]">
+                    {/* Row 3: Deep Metrics & Balance/Alerts - scrollable section, larger fonts */}
+                    <div className="flex-none lg:flex-1 min-h-[420px] sm:min-h-[480px] lg:min-h-0 grid grid-cols-1 lg:grid-cols-12 gap-2 sm:gap-3">
+                        <div className="lg:col-span-12 glass-panel rounded-xl animate-fade-in overflow-hidden relative shadow-lg flex flex-col min-h-[400px] sm:min-h-[450px] lg:min-h-0" style={{ animationDelay: '0.4s' }}>
+                            <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 overflow-hidden">
+                                <div className="lg:col-span-8 border-b lg:border-b-0 lg:border-r border-slate-200 min-h-[320px] sm:min-h-[360px] lg:min-h-0 flex flex-col overflow-hidden">
                                     <DeepMetricsPanel details={outputs?.details} keyDrivers={outputs?.key_drivers} />
                                 </div>
-                                <div className="lg:col-span-4 flex flex-col min-h-[240px]">
-                                    <div className="flex-1 min-h-[120px] border-b border-slate-200 overflow-hidden">
+                                <div className="lg:col-span-4 flex flex-col min-h-[260px] sm:min-h-[280px] lg:min-h-0 overflow-hidden">
+                                    <div className="flex-1 min-h-[100px] border-b border-slate-200 overflow-y-auto customized-scrollbar">
                                         <AlertBox alerts={outputs?.alerts} />
                                     </div>
-                                    <div className="h-36 sm:h-44 p-3 sm:p-4 flex-shrink-0">
-                                        <h3 className="text-[10px] font-bold text-slate-600 uppercase tracking-widest mb-2">Strategy Balance</h3>
+                                    <div className="min-h-[180px] sm:min-h-[200px] p-3 sm:p-4 flex-shrink-0 overflow-hidden">
                                         <RadarPlot scores={outputs?.scores} />
                                     </div>
                                 </div>
@@ -310,7 +309,7 @@ const ClimateSimulator = () => {
                 <button type="button" onClick={() => setMethodologyOpen(true)} className="font-bold uppercase tracking-widest text-teal-600 hover:text-teal-700 hover:underline">
                     Methodology & assumptions
                 </button>
-                <span className="font-semibold">SME Resilience Simulator V2 — Scenario-driven financial analysis</span>
+                <span className="font-semibold">Green Investment Impact Simulator — Scenario-driven financial analysis</span>
             </footer>
 
             <MethodologyPanel isOpen={methodologyOpen} onClose={() => setMethodologyOpen(false)} />
