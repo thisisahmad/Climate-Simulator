@@ -99,34 +99,35 @@ export const SliderControl = ({ label, value, min = 0, max = 100, step = 1, onCh
 );
 
 export const ScoreCard = ({ title, score, icon: Icon, isMain = false, color = "blue", tooltipText }) => {
-    const getGradient = () => {
-        if (isMain) return "from-teal-600 to-teal-700";
-        if (color === "blue") return "from-amber-500 to-orange-600";
-        if (color === "green") return "from-emerald-500 to-teal-600";
-        if (color === "amber") return "from-rose-500 to-red-600";
-        return "from-cyan-500 to-teal-600";
+    const getColor = () => {
+        if (isMain) return "text-teal-600";
+        if (color === "blue") return "text-amber-600";
+        if (color === "green") return "text-emerald-600";
+        if (color === "amber") return "text-rose-600";
+        return "text-cyan-600";
     };
 
-    const getBorder = () => {
-        if (isMain) return "border-teal-300";
-        return "border-slate-200 hover:border-slate-300";
-    }
+    const getAccent = () => {
+        if (isMain) return "bg-teal-500";
+        if (color === "blue") return "bg-amber-500";
+        if (color === "green") return "bg-emerald-500";
+        if (color === "amber") return "bg-rose-500";
+        return "bg-cyan-500";
+    };
 
     return (
-        <div className={`glass-card rounded-lg p-3 sm:p-4 lg:p-5 flex flex-col items-start justify-between min-h-[88px] sm:min-h-[96px] lg:h-full relative overflow-hidden group ${getBorder()} ${isMain ? 'bg-teal-50' : 'bg-white'}`}>
-            <div className="absolute top-0 right-0 w-16 h-16 sm:w-24 sm:h-24 bg-gradient-to-br from-slate-100 to-transparent rounded-full -mr-6 -mt-6 sm:-mr-8 sm:-mt-8 pointer-events-none"></div>
+        <div className={`bg-white rounded-xl p-4 sm:p-5 flex flex-col gap-2 relative overflow-hidden border transition-all duration-200 hover:shadow-md ${isMain ? 'border-teal-200 ring-1 ring-teal-100' : 'border-slate-200 hover:border-slate-300'}`}>
+            <div className={`absolute top-0 left-0 w-full h-0.5 ${getAccent()}`}></div>
 
-            <div className="flex justify-between w-full items-start z-10">
-                <h3 className={`text-[9px] sm:text-[10px] lg:text-[11px] font-bold uppercase tracking-[0.15em] sm:tracking-[0.25em] truncate max-w-[70%] flex items-center gap-0.5 ${isMain ? 'text-teal-700' : 'text-slate-600'}`}>
+            <div className="flex justify-between w-full items-center">
+                <h3 className={`text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.15em] flex items-center gap-1 ${isMain ? 'text-teal-700' : 'text-slate-500'}`}>
                     {title} {tooltipText && <MetricTooltip text={tooltipText} />}
                 </h3>
-                {Icon && <Icon className={`w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0 ${isMain ? 'text-teal-600' : 'text-slate-500'}`} />}
+                {Icon && <Icon className={`w-4 h-4 flex-shrink-0 ${isMain ? 'text-teal-500' : 'text-slate-400'}`} />}
             </div>
 
-            <div className="z-10 mt-auto">
-                <div className={`text-4xl sm:text-5xl lg:text-6xl font-black bg-clip-text text-transparent bg-gradient-to-r ${getGradient()} tracking-tighter leading-none`}>
-                    {Math.round(score)}
-                </div>
+            <div className={`text-3xl sm:text-4xl lg:text-5xl font-black ${getColor()} tracking-tighter leading-none tabular-nums`}>
+                {Math.round(score)}
             </div>
         </div>
     );
@@ -289,61 +290,53 @@ export const DeepMetricsPanel = ({ details, keyDrivers }) => {
         </div>
     );
 
+    const SectionHeader = ({ label, color, borderColor }) => (
+        <div className={`col-span-full flex items-center gap-3 ${color ? '' : 'mt-4'}`}>
+            <div className={`h-0.5 w-6 ${borderColor || 'bg-slate-300'}`}></div>
+            <h4 className={`text-[11px] sm:text-xs font-black uppercase tracking-[0.2em] ${color || 'text-slate-600'} whitespace-nowrap`}>{label}</h4>
+            <div className={`h-0.5 flex-1 ${borderColor || 'bg-slate-200'}`}></div>
+        </div>
+    );
+
     return (
         <div className="p-4 sm:p-5 lg:p-6">
-            <h3 className="text-sm sm:text-base font-black text-slate-700 uppercase tracking-[0.2em] mb-4 sm:mb-5">Deep Dive Indicators (20)</h3>
+            <h3 className="text-sm sm:text-base font-black text-slate-700 uppercase tracking-[0.2em] mb-5 sm:mb-6">Deep Dive Indicators (20)</h3>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-                {/* Finance */}
-                <div>
-                    <h4 className="text-[10px] sm:text-xs font-bold text-blue-700 uppercase mb-2 tracking-[0.2em] border-l-4 border-blue-500 pl-2">Finance</h4>
-                    <div className="grid grid-cols-1 gap-1.5">
-                        <MetricWithDrivers label="ROI" value={details.roi_percent} unit="%" color={details.roi_percent > 0 ? "text-emerald-400" : "text-rose-400"} drivers={keyDrivers?.roi} />
-                        <MetricWithDrivers label="IRR" value={details.irr_percent} unit="%" drivers={keyDrivers?.irr} />
-                        <MetricWithDrivers label="NPV" value={details.npv != null ? Math.round(details.npv) : null} unit="€" drivers={keyDrivers?.npv} />
-                        <MetricWithDrivers label="Payback" value={details.payback_years} unit="Yrs" drivers={keyDrivers?.payback_years} />
-                        <MetricBox label="Disc. Payback" value={details.discounted_payback_years} unit="Yrs" />
-                        <MetricWithDrivers label="Break Even" value={details.break_even_year} unit="Yr" drivers={keyDrivers?.break_even_year} />
-                        <MetricBox label="Viability" value={details.financial_viability} unit="/100" />
-                        <MetricBox label="TCO" value={details.tco_k} unit="K€" />
-                    </div>
-                </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-3">
+                {/* -- Finance (8 metrics) -- */}
+                <SectionHeader label="Finance" color="text-blue-700" borderColor="bg-blue-400" />
+                <MetricWithDrivers label="ROI" value={details.roi_percent} unit="%" color={details.roi_percent > 0 ? "text-emerald-600" : "text-rose-500"} drivers={keyDrivers?.roi} />
+                <MetricWithDrivers label="IRR" value={details.irr_percent} unit="%" drivers={keyDrivers?.irr} />
+                <MetricWithDrivers label="NPV" value={details.npv != null ? Math.round(details.npv) : null} unit="€" drivers={keyDrivers?.npv} />
+                <MetricWithDrivers label="Payback" value={details.payback_years} unit="Yrs" drivers={keyDrivers?.payback_years} />
+                <MetricBox label="Disc. Payback" value={details.discounted_payback_years} unit="Yrs" />
+                <MetricWithDrivers label="Break Even" value={details.break_even_year} unit="Yr" drivers={keyDrivers?.break_even_year} />
+                <MetricBox label="Viability" value={details.financial_viability} unit="/100" />
+                <MetricBox label="TCO" value={details.tco_k} unit="K€" />
 
-                {/* Carbon (4) */}
-                <div>
-                    <h4 className="text-[10px] sm:text-xs font-bold text-emerald-700 uppercase mb-2 tracking-[0.2em] border-l-4 border-emerald-500 pl-2">Carbon</h4>
-                    <div className="grid grid-cols-1 gap-1.5">
-                        <MetricBox label="Reduction (Proxy)" value={details.carbon_reduction_tons} unit="tCO2e" color="text-emerald-300" tooltipText="Estimated carbon reduction from efficiency and targets. Proxy for directional comparison, not certified reporting." />
-                        <MetricBox label="Cost/Ton CO2" value={details.cost_per_ton_co2} unit="€" />
-                        <MetricBox label="Carbon Intensity" value={details.carbon_intensity_kg_per_1k_revenue} unit="kg CO2e/€1k" tooltipText="Index: kg CO2e per €1,000 revenue. Derived from carbon reduction proxy and revenue; for comparison only." />
-                        <MetricBox label="Net Zero" value={details.net_zero_progress} unit="%" />
-                    </div>
-                </div>
+                {/* -- Carbon (4 metrics) -- */}
+                <SectionHeader label="Carbon" color="text-emerald-700" borderColor="bg-emerald-400" />
+                <MetricBox label="CO₂ Reduction" value={details.carbon_reduction_tons} unit="tCO2e" color="text-emerald-600" tooltipText="Estimated carbon reduction from efficiency and targets. Proxy for directional comparison, not certified reporting." />
+                <MetricBox label="Cost/Ton CO₂" value={details.cost_per_ton_co2} unit="€" />
+                <MetricBox label="Carbon Intensity" value={details.carbon_intensity_kg_per_1k_revenue} unit="kg CO2e/€1k" tooltipText="Index: kg CO2e per €1,000 revenue. Derived from carbon reduction proxy and revenue; for comparison only." />
+                <MetricBox label="Net Zero" value={details.net_zero_progress} unit="%" />
 
-                {/* Efficiency (4) */}
-                <div>
-                    <h4 className="text-[10px] sm:text-xs font-bold text-cyan-700 uppercase mb-2 tracking-[0.2em] border-l-4 border-cyan-500 pl-2">Efficiency</h4>
-                    <div className="grid grid-cols-1 gap-1.5">
-                        <MetricBox label="Energy Savings" value={details.energy_savings_mwh} unit="MWh" />
-                        <MetricBox label="Water Savings" value={details.water_savings_kl} unit="KL" />
-                        <MetricBox label="Waste Diversion" value={details.waste_diversion_index} unit="%" tooltipText="Indicative index from waste reduction and circular economy inputs, not measured quantities." />
-                        <MetricBox label="Res. Efficiency" value={details.resource_efficiency_index} unit="/100" tooltipText="Indicative index combining energy, resource, waste and circular inputs; not measured quantities." />
-                    </div>
-                </div>
+                {/* -- Efficiency (4 metrics) -- */}
+                <SectionHeader label="Efficiency" color="text-cyan-700" borderColor="bg-cyan-400" />
+                <MetricBox label="Energy Savings" value={details.energy_savings_mwh} unit="MWh" />
+                <MetricBox label="Water Savings" value={details.water_savings_kl} unit="KL" />
+                <MetricBox label="Waste Diversion" value={details.waste_diversion_index} unit="%" tooltipText="Indicative index from waste reduction and circular economy inputs, not measured quantities." />
+                <MetricBox label="Res. Efficiency" value={details.resource_efficiency_index} unit="/100" tooltipText="Indicative index combining energy, resource, waste and circular inputs; not measured quantities." />
 
-                {/* Risk & ESG (4) */}
-                <div>
-                    <h4 className="text-[10px] sm:text-xs font-bold text-amber-700 uppercase mb-2 tracking-[0.2em] border-l-4 border-amber-500 pl-2">Risk & ESG</h4>
-                    <div className="grid grid-cols-1 gap-2">
-                        <MetricWithDrivers label="ESG Score" value={details.esg_score} unit="/100" drivers={keyDrivers?.esg_score} />
-                        <MetricBox label="Resilience" value={details.resilience_index} unit="Idx" color="text-amber-200" tooltipText="Strategic resilience index from reputation, productivity, turnover and market access; normalized 0–100." />
-                        <MetricBox label="Emp. Engage" value={details.employee_engagement} unit="/100" />
-                        <div className="bg-slate-50 rounded-lg p-3 sm:p-4 border border-slate-200 flex flex-col items-center justify-center text-center">
-                            <span className="text-[10px] sm:text-xs uppercase font-bold text-slate-600 tracking-[0.2em] mb-1">Exec Risk</span>
-                            <div className={`text-xs sm:text-sm font-black uppercase px-2 py-1 rounded ${details.execution_risk_factor === 'High' ? 'bg-rose-100 text-rose-700 border border-rose-300' : (details.execution_risk_factor === 'Medium' ? 'bg-amber-100 text-amber-700 border border-amber-300' : 'bg-emerald-100 text-emerald-700 border border-emerald-300')}`}>
-                                {details.execution_risk_factor}
-                            </div>
-                        </div>
+                {/* -- Risk & ESG (4 metrics) -- */}
+                <SectionHeader label="Risk & ESG" color="text-amber-700" borderColor="bg-amber-400" />
+                <MetricWithDrivers label="ESG Score" value={details.esg_score} unit="/100" drivers={keyDrivers?.esg_score} />
+                <MetricBox label="Resilience" value={details.resilience_index} unit="Idx" tooltipText="Strategic resilience index from reputation, productivity, turnover and market access; normalized 0–100." />
+                <MetricBox label="Emp. Engage" value={details.employee_engagement} unit="/100" />
+                <div className="bg-slate-50 rounded-lg p-3 sm:p-4 border border-slate-200 flex flex-col items-center justify-center text-center">
+                    <span className="text-[10px] sm:text-xs uppercase font-bold text-slate-600 tracking-[0.12em] mb-1.5">Exec Risk</span>
+                    <div className={`text-sm sm:text-base font-black uppercase px-3 py-1 rounded-md ${details.execution_risk_factor === 'High' ? 'bg-rose-100 text-rose-700 border border-rose-300' : (details.execution_risk_factor === 'Medium' ? 'bg-amber-100 text-amber-700 border border-amber-300' : 'bg-emerald-100 text-emerald-700 border border-emerald-300')}`}>
+                        {details.execution_risk_factor}
                     </div>
                 </div>
             </div>
