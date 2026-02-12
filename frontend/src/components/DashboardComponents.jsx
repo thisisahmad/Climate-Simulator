@@ -182,9 +182,9 @@ export const RadarPlot = ({ scores }) => {
     ];
 
     return (
-        <div className="h-full w-full flex flex-col min-h-[160px] sm:min-h-[180px]">
+        <div className="w-full flex flex-col">
             <h3 className="text-xs sm:text-sm font-bold text-slate-600 uppercase tracking-wider mb-2 w-full text-left">Strategy Balance</h3>
-            <div className="flex-1 min-h-[140px] sm:min-h-[160px] -ml-2 sm:-ml-4">
+            <div className="w-full h-[240px] sm:h-[280px] -ml-2 sm:-ml-4">
                 <ResponsiveContainer width="100%" height="100%">
                     <RadarChart cx="50%" cy="50%" outerRadius="85%" data={data}>
                         <PolarGrid stroke="#94a3b8" />
@@ -212,7 +212,7 @@ export const RadarPlot = ({ scores }) => {
 export const AlertBox = ({ alerts }) => {
     if (!alerts || alerts.length === 0) {
         return (
-            <div className="h-full flex flex-col items-center justify-center text-slate-500">
+            <div className="p-5 sm:p-6 flex flex-col items-center justify-center text-slate-500">
                 <CheckCircle className="mb-3 h-8 w-8 text-emerald-500" />
                 <p className="text-sm font-medium text-slate-600">System nominal. No critical alerts.</p>
             </div>
@@ -229,27 +229,17 @@ export const AlertBox = ({ alerts }) => {
     }
 
     return (
-        <div className="h-full flex flex-col overflow-hidden">
-            <h3 className="text-[10px] sm:text-[12px] font-bold text-slate-700 uppercase tracking-[0.2em] mb-3 sm:mb-6 flex items-center gap-2 sm:gap-3 px-3 sm:px-6 pt-3 sm:pt-6">
-                <AlertTriangle className="h-3 w-3 sm:h-4 sm:w-4 text-amber-500 flex-shrink-0" /> System Alerts
+        <div className="p-4 sm:p-5 lg:p-6">
+            <h3 className="text-xs sm:text-sm font-bold text-slate-700 uppercase tracking-[0.2em] mb-4 flex items-center gap-2 sm:gap-3">
+                <AlertTriangle className="h-4 w-4 text-amber-500 flex-shrink-0" /> System Alerts
             </h3>
-            <div className="flex-1 overflow-y-auto customized-scrollbar px-3 sm:px-6 pb-3 sm:pb-6">
-                {alerts.length === 0 ? (
-                    <div className="h-full flex flex-col items-center justify-center text-slate-600">
-                        <CheckCircle2 className="h-16 w-16 mb-5 opacity-20" />
-                        <span className="text-base font-black opacity-40 tracking-[0.2em] uppercase">System nominal</span>
-                        <span className="text-[11px] font-medium opacity-30 tracking-widest mt-2 uppercase">No critical alerts detected.</span>
+            <div className="space-y-3">
+                {alerts.map((alert, idx) => (
+                    <div key={idx} className={`p-3 sm:p-4 rounded-xl border border-slate-200 border-l-[4px] sm:border-l-[6px] text-xs sm:text-sm shadow-sm ${getSeverityStyles(alert.severity)}`}>
+                        <div className="font-black uppercase mb-1 text-[9px] sm:text-[10px] tracking-[0.2em] opacity-90">{alert.severity} Priority</div>
+                        <div className="leading-relaxed font-semibold">{alert.message}</div>
                     </div>
-                ) : (
-                    <div className="space-y-4">
-                        {alerts.map((alert, idx) => (
-                            <div key={idx} className={`p-3 sm:p-5 rounded-xl border border-slate-200 border-l-[4px] sm:border-l-[6px] text-xs sm:text-sm shadow-sm ${getSeverityStyles(alert.severity)}`}>
-                                <div className="font-black uppercase mb-1 sm:mb-1.5 text-[9px] sm:text-[10px] tracking-[0.2em] opacity-90">{alert.severity} Priority</div>
-                                <div className="leading-relaxed font-semibold">{alert.message}</div>
-                            </div>
-                        ))}
-                    </div>
-                )}
+                ))}
             </div>
         </div>
     );
@@ -274,34 +264,36 @@ export const DeepMetricsPanel = ({ details, keyDrivers }) => {
 
     const MetricBox = ({ label, value, unit, color, tooltipText }) => (
         <div className="bg-slate-50 rounded-lg p-3 sm:p-4 border border-slate-200 flex flex-col items-center justify-center text-center group hover:bg-slate-100 transition-colors min-w-0">
-            <span className="text-[10px] sm:text-xs uppercase font-bold text-slate-600 tracking-[0.15em] mb-1 group-hover:text-slate-700 truncate w-full flex items-center justify-center gap-0.5">
+            <span className="text-[10px] sm:text-xs uppercase font-bold text-slate-600 tracking-[0.12em] mb-1.5 group-hover:text-slate-700 w-full flex items-center justify-center gap-0.5">
                 {label} {tooltipText && <MetricTooltip text={tooltipText} />}
             </span>
-            <div className={`text-base sm:text-lg lg:text-xl font-black ${color || 'text-slate-800'} tabular-nums leading-none`}>
-                {formatMetric(value, unit)}<span className="text-[10px] sm:text-xs ml-1 font-bold text-slate-500">{unit}</span>
+            <div className={`text-lg sm:text-xl lg:text-2xl font-black ${color || 'text-slate-800'} tabular-nums leading-none`}>
+                {formatMetric(value, unit)}
             </div>
+            <span className="text-[10px] sm:text-xs mt-1 font-bold text-slate-500">{unit}</span>
         </div>
     );
 
     const MetricWithDrivers = ({ label, value, unit, color, tooltipText, drivers }) => (
         <div className="min-w-0">
             <div className="bg-slate-50 rounded-lg p-3 sm:p-4 border border-slate-200 flex flex-col items-center justify-center text-center group hover:bg-slate-100 transition-colors">
-                <span className="text-[10px] sm:text-xs uppercase font-bold text-slate-600 tracking-[0.15em] mb-1 flex items-center justify-center gap-0.5">
+                <span className="text-[10px] sm:text-xs uppercase font-bold text-slate-600 tracking-[0.12em] mb-1.5 flex items-center justify-center gap-0.5">
                     {label} {tooltipText && <MetricTooltip text={tooltipText} />}
                 </span>
-                <div className={`text-base sm:text-lg lg:text-xl font-black ${color || 'text-slate-800'} tabular-nums leading-none`}>
-                    {formatMetric(value, unit)}<span className="text-[10px] sm:text-xs ml-1 font-bold text-slate-500">{unit}</span>
+                <div className={`text-lg sm:text-xl lg:text-2xl font-black ${color || 'text-slate-800'} tabular-nums leading-none`}>
+                    {formatMetric(value, unit)}
                 </div>
+                <span className="text-[10px] sm:text-xs mt-1 font-bold text-slate-500">{unit}</span>
                 <KeyDriversSnippet drivers={drivers} />
             </div>
         </div>
     );
 
     return (
-        <div className="h-full flex flex-col p-3 sm:p-4 overflow-hidden min-h-0">
-            <h3 className="text-xs sm:text-sm font-bold text-slate-700 uppercase tracking-[0.2em] mb-3 flex-shrink-0">Deep Dive Indicators (20)</h3>
+        <div className="p-4 sm:p-5 lg:p-6">
+            <h3 className="text-sm sm:text-base font-black text-slate-700 uppercase tracking-[0.2em] mb-4 sm:mb-5">Deep Dive Indicators (20)</h3>
 
-            <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 customized-scrollbar pr-1">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
                 {/* Finance */}
                 <div>
                     <h4 className="text-[10px] sm:text-xs font-bold text-blue-700 uppercase mb-2 tracking-[0.2em] border-l-4 border-blue-500 pl-2">Finance</h4>

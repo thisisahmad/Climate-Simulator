@@ -80,9 +80,9 @@ const ClimateSimulator = () => {
     };
 
     return (
-        <div className="flex flex-col min-h-screen text-slate-800 font-sans overflow-x-hidden bg-gradient-to-b from-slate-100 to-slate-50">
+        <div className="min-h-screen text-slate-800 font-sans overflow-x-hidden bg-gradient-to-b from-slate-100 to-slate-50">
             {/* -- Top Header Bar -- */}
-            <div className="flex-none h-12 sm:h-14 border-b border-teal-200 flex items-center justify-between px-4 sm:px-6 bg-teal-600 shadow-md">
+            <div className="sticky top-0 z-40 h-12 sm:h-14 border-b border-teal-200 flex items-center justify-between px-4 sm:px-6 bg-teal-600 shadow-md">
                 <div className="flex items-center gap-2 sm:gap-3 min-w-0">
                     <div className="w-8 h-8 sm:w-9 sm:h-9 flex-shrink-0 rounded-lg bg-white/20 flex items-center justify-center ring-2 ring-white/30">
                         <Activity className="text-white w-4 h-4 sm:w-5 sm:h-5" />
@@ -94,11 +94,11 @@ const ClimateSimulator = () => {
                 </div>
             </div>
 
-            {/* -- Main Content -- On mobile: single column, full page scroll so charts are visible below. On lg: side-by-side. */}
-            <div className="flex-1 min-h-0 flex flex-col lg:flex-row gap-2 p-2 sm:p-3 overflow-y-auto overflow-x-hidden">
+            {/* -- Main Content -- Normal page flow. On mobile: results first, params second. On lg: side-by-side with sticky sidebar. */}
+            <div className="flex flex-col lg:flex-row gap-3 p-2 sm:p-3">
 
-                {/* -- Left Panel: Inputs -- On mobile: order-2 so Results (graphs) show first. */}
-                <div className="w-full lg:w-[380px] flex-none flex flex-col glass-panel rounded-xl overflow-hidden shadow-2xl max-h-[70vh] sm:max-h-[75vh] lg:max-h-[calc(100vh-5rem)] shrink-0 order-2 lg:order-none">
+                {/* -- Left Panel: Inputs -- On mobile: order-2 so Results show first. On lg: sticky sidebar. */}
+                <div className="w-full lg:w-[380px] lg:sticky lg:top-[3.5rem] lg:self-start lg:max-h-[calc(100vh-3.5rem)] flex flex-col glass-panel rounded-xl overflow-hidden shadow-2xl shrink-0 order-2 lg:order-none">
                     <div className="px-4 sm:px-5 py-3 sm:py-4 border-b border-slate-200 flex items-center gap-3 bg-slate-50 flex-shrink-0">
                         <Settings className="w-4 h-4 sm:w-5 sm:h-5 text-teal-600 flex-shrink-0" />
                         <h2 className="text-[11px] sm:text-[12px] font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] text-slate-700">Parameters</h2>
@@ -230,25 +230,25 @@ const ClimateSimulator = () => {
                     </div>
                 </div>
 
-                {/* -- Right Panel: Results -- On mobile: order-1 so it appears first (graphs visible immediately). */}
-                <div id="results" className="flex-none lg:flex-1 flex flex-col gap-3 min-h-0 min-w-0 overflow-y-auto overflow-x-hidden customized-scrollbar lg:max-h-[calc(100vh-5rem)] order-1 lg:order-none">
+                {/* -- Right Panel: Results -- On mobile: order-1 so it appears first. Flows naturally, no scroll container. */}
+                <div id="results" className="flex-1 flex flex-col gap-3 min-w-0 order-1 lg:order-none">
                     {/* Methodology link - top right of results */}
-                    <div className="flex justify-end flex-none">
+                    <div className="flex justify-end">
                         <button type="button" onClick={() => setMethodologyOpen(true)} className="flex items-center gap-1.5 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-teal-600 hover:text-teal-700 hover:underline">
                             <FileText className="w-3.5 h-3.5" /> Methodology & assumptions
                         </button>
                     </div>
 
                     {/* Row 1: Scorecards - 2x2 on mobile, 4 cols on md+ */}
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 flex-none">
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
                         <ScoreCard title="Economic" score={outputs?.scores?.economic || 0} icon={DollarSign} color="blue" tooltipText="Index: normalized score 0–100. See Methodology & assumptions for details." />
                         <ScoreCard title="Environmental" score={outputs?.scores?.environmental || 0} icon={Leaf} color="green" tooltipText="Index: normalized score 0–100. Environmental outputs are proxies for directional comparison." />
                         <ScoreCard title="Strategic" score={outputs?.scores?.strategic || 0} icon={TrendingUp} color="amber" tooltipText="Index: normalized score 0–100. See Methodology & assumptions for details." />
                         <ScoreCard title="Overall Score" score={outputs?.scores?.overall || 0} icon={Zap} isMain tooltipText="Composite index normalized to 0–100. See Methodology & assumptions for details." />
                     </div>
 
-                    {/* Row 2: Projection Charts & Heatmap - stack on mobile with fixed height so graphs visible */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-2 sm:gap-3 flex-none">
+                    {/* Row 2: Projection Charts & Heatmap */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-2 sm:gap-3">
                         <div className="lg:col-span-4 min-h-[280px] sm:min-h-[300px] lg:min-h-[340px] glass-panel rounded-xl animate-fade-in shadow-xl" style={{ animationDelay: '0.1s' }}>
                             <ProjectionChart
                                 data={outputs?.projections}
@@ -282,22 +282,18 @@ const ClimateSimulator = () => {
                         </div>
                     </div>
 
-                    {/* Row 3: Deep Metrics & Balance/Alerts - scrollable section, larger fonts */}
-                    <div className="flex-none lg:flex-1 min-h-[420px] sm:min-h-[480px] lg:min-h-0 grid grid-cols-1 lg:grid-cols-12 gap-2 sm:gap-3">
-                        <div className="lg:col-span-12 glass-panel rounded-xl animate-fade-in overflow-hidden relative shadow-lg flex flex-col min-h-[400px] sm:min-h-[450px] lg:min-h-0" style={{ animationDelay: '0.4s' }}>
-                            <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 overflow-hidden">
-                                <div className="lg:col-span-8 border-b lg:border-b-0 lg:border-r border-slate-200 min-h-[320px] sm:min-h-[360px] lg:min-h-0 flex flex-col overflow-hidden">
-                                    <DeepMetricsPanel details={outputs?.details} keyDrivers={outputs?.key_drivers} />
-                                </div>
-                                <div className="lg:col-span-4 flex flex-col min-h-[260px] sm:min-h-[280px] lg:min-h-0 overflow-hidden">
-                                    <div className="flex-1 min-h-[100px] border-b border-slate-200 overflow-y-auto customized-scrollbar">
-                                        <AlertBox alerts={outputs?.alerts} />
-                                    </div>
-                                    <div className="min-h-[180px] sm:min-h-[200px] p-3 sm:p-4 flex-shrink-0 overflow-hidden">
-                                        <RadarPlot scores={outputs?.scores} />
-                                    </div>
-                                </div>
-                            </div>
+                    {/* Row 3: Deep Metrics - full width, flows naturally */}
+                    <div className="glass-panel rounded-xl animate-fade-in shadow-lg" style={{ animationDelay: '0.4s' }}>
+                        <DeepMetricsPanel details={outputs?.details} keyDrivers={outputs?.key_drivers} />
+                    </div>
+
+                    {/* Row 4: Alerts & Strategy Balance side by side */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+                        <div className="glass-panel rounded-xl animate-fade-in shadow-lg" style={{ animationDelay: '0.5s' }}>
+                            <AlertBox alerts={outputs?.alerts} />
+                        </div>
+                        <div className="glass-panel rounded-xl animate-fade-in shadow-lg p-4 sm:p-5" style={{ animationDelay: '0.6s' }}>
+                            <RadarPlot scores={outputs?.scores} />
                         </div>
                     </div>
 
@@ -305,7 +301,7 @@ const ClimateSimulator = () => {
             </div>
 
             {/* Footer with Methodology link */}
-            <footer className="flex-none border-t border-slate-200 bg-slate-50/80 px-4 py-3 flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-[10px] sm:text-xs text-slate-600">
+            <footer className="border-t border-slate-200 bg-slate-50/80 px-4 py-3 flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-[10px] sm:text-xs text-slate-600">
                 <button type="button" onClick={() => setMethodologyOpen(true)} className="font-bold uppercase tracking-widest text-teal-600 hover:text-teal-700 hover:underline">
                     Methodology & assumptions
                 </button>

@@ -22,19 +22,15 @@
     @apply font-sans antialiased;
     color: #0f172a;
     overflow-x: hidden;
+    overflow-y: auto;
     min-height: 100dvh;
     min-height: 100vh;
+    -webkit-overflow-scrolling: touch;
     background: linear-gradient(180deg, #e2e8f0 0%, #f1f5f9 30%, #f8fafc 100%);
   }
   body::selection {
     background: rgba(13, 148, 136, 0.3);
     color: #0f172a;
-  }
-  @media (max-width: 1023px) {
-    body, html { overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; height: auto; min-height: 100%; }
-  }
-  @media (min-width: 1024px) {
-    body { overflow: hidden; }
   }
 }
 
