@@ -154,9 +154,9 @@
         </thead>
         <tbody>
             <tr>
-                <td><strong>Initial Revenue</strong></td>
+                <td><strong>Initial Sales</strong></td>
                 <td>Number (€)</td>
-                <td>Starting annual revenue</td>
+                <td>Starting annual sales</td>
                 <td>€1,000,000</td>
             </tr>
             <tr>
@@ -168,13 +168,13 @@
             <tr>
                 <td><strong>Variable Costs %</strong></td>
                 <td>Slider (0-100%)</td>
-                <td>Variable costs as percentage of revenue</td>
+                <td>Variable costs as percentage of sales</td>
                 <td>40%</td>
             </tr>
             <tr>
-                <td><strong>Revenue Growth %</strong></td>
+                <td><strong>Sales Growth %</strong></td>
                 <td>Slider (0-100%)</td>
-                <td>Annual revenue growth rate</td>
+                <td>Annual sales growth rate</td>
                 <td>5%</td>
             </tr>
         </tbody>
@@ -519,7 +519,7 @@
             </tr>
             <tr>
                 <td><strong>Carbon Intensity</strong></td>
-                <td>kg CO2e per €1,000 revenue (index for comparison; see formula)</td>
+                <td>kg CO2e per €1,000 sales (index for comparison; see formula)</td>
                 <td>kg CO2e/€1k</td>
                 <td><span class="new-badge">NEW</span></td>
             </tr>
@@ -610,7 +610,7 @@
 
     <h3>Additional Outputs</h3>
     <ul>
-        <li><strong>Projection Charts</strong>: Annual revenue and net profit comparisons (Scenario A vs Scenario B), with persistent legend and toggles to show/hide each scenario; consistent colors across all views.</li>
+        <li><strong>Projection Charts</strong>: Annual sales and net profit comparisons (Scenario A vs Scenario B), with persistent legend and toggles to show/hide each scenario; consistent colors across all views.</li>
         <li><strong>Impact Matrix</strong>: 3x3 matrix showing Upside, Risk, and Feasibility for Economic, Environmental, and Strategic dimensions</li>
         <li><strong>System Alerts</strong>: Automated risk alerts (Greenwashing, Financial, Strategic, Execution, Profitability)</li>
         <li><strong>Strategy Balance</strong>: Radar chart visualizing balance between Economic, Environmental, and Strategic performance</li>
@@ -628,9 +628,9 @@
         <ul>
             <li><strong>Carbon Reduction (Proxy)</strong>: Derived from savings calculations + a potential slider input. This is a simplified directional estimate, not a precise carbon accounting measurement.</li>
             <li><strong>Energy Savings (Proxy)</strong>: Estimated based on efficiency percentage and OPEX assumptions. Uses simplified assumptions (energy costs as 20% of OPEX, average €0.15/kWh).</li>
-            <li><strong>Water Savings (Proxy)</strong>: Based on fixed assumption (1L per €1 revenue for manufacturing) multiplied by resource efficiency. This is a directional estimate, not actual water usage measurement.</li>
+            <li><strong>Water Savings (Proxy)</strong>: Based on fixed assumption (1L per €1 sales for manufacturing) multiplied by resource efficiency. This is a directional estimate, not actual water usage measurement.</li>
             <li><strong>Waste Diversion (Index)</strong>: Calculated from linear combinations of waste reduction and circular economy percentages. This is an index-based metric for comparison, not actual waste diversion tracking.</li>
-            <li><strong>Carbon Intensity</strong>: kg CO2e per €1,000 revenue; index for comparison (see formula in §5).</li>
+            <li><strong>Carbon Intensity</strong>: kg CO2e per €1,000 sales; index for comparison (see formula in §5).</li>
             <li><strong>Resource Efficiency Index</strong>: A composite index combining multiple efficiency factors.</li>
         </ul>
         <p><em>These metrics are intentionally simplified to enable scenario comparison and decision support. They should be interpreted as directional indicators rather than precise measurements.</em></p>
@@ -642,7 +642,7 @@
         <ul>
             <li><strong>Energy cost share default:</strong> 20% of OPEX</li>
             <li><strong>Electricity price default:</strong> €0.15/kWh</li>
-            <li><strong>Water intensity default:</strong> 1 L per €1 revenue (manufacturing baseline) unless otherwise specified</li>
+            <li><strong>Water intensity default:</strong> 1 L per €1 sales (manufacturing baseline) unless otherwise specified</li>
             <li><strong>Waste proxy and resource efficiency</strong> are indicative indices, not measured quantities</li>
         </ul>
 
@@ -657,21 +657,21 @@
         <li><strong>Scenario B (Sustainable)</strong>: Includes sustainability CAPEX, efficiency gains, and market benefits</li>
     </ul>
 
-    <h3>1. Revenue Projections</h3>
+    <h3>1. Sales Projections</h3>
     <div class="summary-box">
         <p><strong>Scenario A (Traditional - Grey Line):</strong></p>
-        <p><code>Revenue_A(t) = Revenue_A(t-1) × (1 + Revenue Growth Rate + Inflation Rate + 0.01)</code></p>
+        <p><code>Sales_A(t) = Sales_A(t-1) × (1 + Sales Growth Rate + Inflation Rate + 0.01)</code></p>
         <p><em>Note: Added inflation + 1% base market growth to make traditional scenario more realistic and less flat</em></p>
         
         <p><strong>Scenario B (Sustainable - Purple Line):</strong></p>
-        <p><code>Revenue_B(t) = Revenue_B(t-1) × (1 + Revenue Growth Rate + Reputation Uplift % + Green Market Access %)</code></p>
-        <p><em>How it changes: Increasing "Reputation Uplift" or "Green Market Access" sliders increases revenue growth rate for Scenario B</em></p>
+        <p><code>Sales_B(t) = Sales_B(t-1) × (1 + Sales Growth Rate + Reputation Uplift % + Green Market Access %)</code></p>
+        <p><em>How it changes: Increasing "Reputation Uplift" or "Green Market Access" sliders increases sales growth rate for Scenario B</em></p>
     </div>
 
     <h3>2. Operating Expenses (OPEX)</h3>
     <div class="summary-box">
         <p><strong>Both Scenarios:</strong></p>
-        <p><code>OPEX = Revenue × Variable Costs % + Fixed Costs</code></p>
+        <p><code>OPEX = Sales × Variable Costs % + Fixed Costs</code></p>
         
         <p><strong>Scenario B Savings:</strong></p>
         <p><code>Savings = OPEX_B × (Energy Efficiency % + Resource Efficiency % + Waste Reduction % + Circular Economy %)</code></p>
@@ -681,12 +681,12 @@
     <h3>3. Profit Calculations</h3>
     <div class="summary-box">
         <p><strong>Scenario A:</strong></p>
-        <p><code>EBIT_A = Revenue_A - OPEX_A</code></p>
+        <p><code>EBIT_A = Sales_A - OPEX_A</code></p>
         <p><code>Tax_A = max(0, EBIT_A × Tax Rate)</code></p>
         <p><code>Profit_A = EBIT_A - Tax_A</code></p>
         
         <p><strong>Scenario B:</strong></p>
-        <p><code>EBITDA_B = Revenue_B - OPEX_B + Savings</code></p>
+        <p><code>EBITDA_B = Sales_B - OPEX_B + Savings</code></p>
         <p><code>EBIT_B = EBITDA_B - Depreciation</code></p>
         <p><code>Tax_B = max(0, EBIT_B × Tax Rate)</code></p>
         <p><code>Profit_B = EBIT_B - Tax_B</code></p>
@@ -702,7 +702,7 @@
     <div class="summary-box">
         <p><code>ROI = Cumulative(Profit_B − Profit_A) / Total_Incremental_Investment × 100</code></p>
         <p>Do <strong>not</strong> add "Cumulative Savings" separately; savings are already embedded in Profit_B.</p>
-        <p><em>How it changes: Higher sustainability CAPEX initially lowers ROI; higher efficiency and revenue growth improve incremental profit and ROI.</em></p>
+        <p><em>How it changes: Higher sustainability CAPEX initially lowers ROI; higher efficiency and sales growth improve incremental profit and ROI.</em></p>
     </div>
 
     <h4>IRR (Internal Rate of Return)</h4>
@@ -735,7 +735,7 @@
     <h4>Break-Even Year <span class="new-badge">NEW</span></h4>
     <div class="summary-box">
         <p><code>Break-Even = First year where Profit_B > Profit_A</code></p>
-        <p><em>How it changes: Higher efficiency gains and revenue growth → Earlier break-even point</em></p>
+        <p><em>How it changes: Higher efficiency gains and sales growth → Earlier break-even point</em></p>
     </div>
 
     <h4>TCO (Total Cost of Ownership) <span class="new-badge">NEW</span></h4>
@@ -759,12 +759,12 @@
         <p><em>How it changes: Lower sustainability CAPEX or higher carbon reduction → Better cost efficiency</em></p>
     </div>
 
-    <h4>Carbon Intensity (kg CO2e per €1,000 revenue)</h4>
+    <h4>Carbon Intensity (kg CO2e per €1,000 sales)</h4>
     <div class="summary-box">
-        <p><code>Carbon Intensity (kg/€1k) = (Carbon Reduction_tCO2e × 1000) / (Total Revenue_B / 1000)</code></p>
-        <p><strong>Units:</strong> kg CO2e per €1,000 revenue (kg CO2e/€1k). Carbon reduction in tons is converted to kg (×1000); revenue in € is expressed per €1k (÷1000).</p>
+        <p><code>Carbon Intensity (kg/€1k) = (Carbon Reduction_tCO2e × 1000) / (Total Sales_B / 1000)</code></p>
+        <p><strong>Units:</strong> kg CO2e per €1,000 sales (kg CO2e/€1k). Carbon reduction in tons is converted to kg (×1000); sales in € is expressed per €1k (÷1000).</p>
         <p><strong>Note:</strong> This is an index for directional comparison, not certified reporting.</p>
-        <p><em>How it changes: Higher revenue or lower carbon reduction → Lower intensity (better).</em></p>
+        <p><em>How it changes: Higher sales or lower carbon reduction → Lower intensity (better).</em></p>
     </div>
 
     <h4>Net Zero Progress</h4>
@@ -785,8 +785,8 @@
 
     <h4>Water Savings (Proxy) (Liters)</h4>
     <div class="summary-box">
-        <p><code>Water Savings = Total Revenue_B × Resource Efficiency %</code></p>
-        <p>Assumes 1L water per €1 revenue for manufacturing</p>
+        <p><code>Water Savings = Total Sales_B × Resource Efficiency %</code></p>
+        <p>Assumes 1L water per €1 sales for manufacturing</p>
         <p><strong>Note:</strong> This is a proxy estimate using fixed assumptions. It is a directional estimate, not actual water usage measurement.</p>
         <p><em>How it changes: Higher "Resource Efficiency %" slider → More water savings</em></p>
     </div>
@@ -867,9 +867,9 @@
 
     <h3>9. How Input Changes Affect Graphs</h3>
     <div class="summary-box">
-        <h4>Revenue Graph (Grey vs Purple Lines):</h4>
+        <h4>Sales Graph (Grey vs Teal Lines):</h4>
         <ul>
-            <li><strong>Revenue Growth Rate</strong>: Affects both lines. Higher value → Steeper growth for both scenarios</li>
+            <li><strong>Sales Growth Rate</strong>: Affects both lines. Higher value → Steeper growth for both scenarios</li>
             <li><strong>Reputation Uplift %</strong>: Only affects purple line (Scenario B). Higher value → Purple line grows faster</li>
             <li><strong>Green Market Access %</strong>: Only affects purple line. Higher value → Purple line grows faster</li>
             <li><strong>Inflation Rate</strong>: Affects grey line (Scenario A). Higher inflation → Grey line grows slightly more</li>
@@ -887,7 +887,7 @@
 
     <h3>10. Key Drivers (Results UX)</h3>
     <div class="summary-box">
-        <p>For <strong>ROI, IRR, NPV, Payback, Break-even</strong>, and <strong>ESG/Strategic Score</strong>, the app displays a short <strong>"Key drivers"</strong> snippet (2–4 items) under each headline value. These are computed by a lightweight sensitivity approach: each major input (e.g. Sustainability CAPEX, revenue growth, energy efficiency, discount rate) is nudged by +5% one at a time; the absolute impact on the output is measured and the top drivers are shown. This helps users understand <em>why</em> the results look the way they do.</p>
+        <p>For <strong>ROI, IRR, NPV, Payback, Break-even</strong>, and <strong>ESG/Strategic Score</strong>, the app displays a short <strong>"Key drivers"</strong> snippet (2–4 items) under each headline value. These are computed by a lightweight sensitivity approach: each major input (e.g. Sustainability CAPEX, sales growth, energy efficiency, discount rate) is nudged by +5% one at a time; the absolute impact on the output is measured and the top drivers are shown. This helps users understand <em>why</em> the results look the way they do.</p>
     </div>
 
     <h3>11. Real-Time Calculation Updates</h3>
@@ -895,7 +895,7 @@
         <p>When you adjust any input parameter in the left sidebar:</p>
         <ol>
             <li><strong>Immediate Recalculation</strong>: All formulas are recalculated instantly (200ms debounce)</li>
-            <li><strong>Graph Updates</strong>: Both revenue and profit graphs update to show new projections</li>
+            <li><strong>Graph Updates</strong>: Both sales and profit graphs update to show new projections</li>
             <li><strong>Score Updates</strong>: All four top-level scores (Economic, Environmental, Strategic, Overall) recalculate</li>
             <li><strong>Deep Metrics Update</strong>: All 20 detailed metrics in Deep Dive Indicators (including NPV and key drivers) recalculate</li>
             <li><strong>Impact Matrix Update</strong>: The 3x3 matrix updates with new Upside, Risk, and Feasibility values</li>

@@ -140,10 +140,10 @@ const ClimateSimulator = () => {
                                 <DollarSign className="w-3.5 h-3.5" /> Baseline Financials
                             </h3>
                             <div className="grid grid-cols-2 gap-x-3 gap-y-3">
-                                <NumericInput label="Init. Revenue" value={inputs.initial_revenue} onChange={v => h('initial_revenue', v)} prefix="€" compact step={500} />
+                                <NumericInput label="Init. Sales" value={inputs.initial_revenue} onChange={v => h('initial_revenue', v)} prefix="€" compact step={500} />
                                 <NumericInput label="Fixed Costs" value={inputs.fixed_costs} onChange={v => h('fixed_costs', v)} prefix="€" compact step={500} />
                                 <SliderControl label="Var. Costs" value={Math.round(inputs.variable_costs_pct * 100)} onChange={v => h('variable_costs_pct', v / 100)} suffix="%" compact step={1} showNumericInput numericValue={Math.round(inputs.variable_costs_pct * 100)} onNumericChange={v => h('variable_costs_pct', v / 100)} />
-                                <SliderControl label="Rev. Growth" value={Math.round(inputs.revenue_growth_rate * 100)} onChange={v => h('revenue_growth_rate', v / 100)} suffix="%" compact step={1} showNumericInput numericValue={Math.round(inputs.revenue_growth_rate * 100)} onNumericChange={v => h('revenue_growth_rate', v / 100)} />
+                                <SliderControl label="Sales Growth" value={Math.round(inputs.revenue_growth_rate * 100)} onChange={v => h('revenue_growth_rate', v / 100)} suffix="%" compact step={1} showNumericInput numericValue={Math.round(inputs.revenue_growth_rate * 100)} onNumericChange={v => h('revenue_growth_rate', v / 100)} />
                             </div>
                         </div>
 
@@ -260,7 +260,7 @@ const ClimateSimulator = () => {
                         <div className="min-h-[280px] sm:min-h-[320px] bg-white rounded-xl border border-slate-200 shadow-sm animate-fade-in" style={{ animationDelay: '0.1s' }}>
                             <ProjectionChart
                                 data={outputs?.projections}
-                                title="Revenue"
+                                title="Sales"
                                 dataKeyA="revenue_a"
                                 dataKeyB="revenue_b"
                                 labelA="Scenario A"

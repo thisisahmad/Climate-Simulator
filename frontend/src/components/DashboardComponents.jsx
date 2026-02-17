@@ -18,13 +18,26 @@ import { AlertTriangle, Info, CheckCircle, CheckCircle2, XCircle, X } from 'luci
 
 const MetricTooltip = ({ text, id }) => {
     const [show, setShow] = React.useState(false);
+    const ref = React.useRef(null);
+    const [pos, setPos] = React.useState('below');
+
+    const handleEnter = () => {
+        if (ref.current) {
+            const rect = ref.current.getBoundingClientRect();
+            const spaceBelow = window.innerHeight - rect.bottom;
+            const spaceRight = window.innerWidth - rect.left;
+            setPos(spaceBelow < 120 ? 'above' : 'below');
+        }
+        setShow(true);
+    };
+
     return (
-        <span className="relative inline-flex ml-0.5">
-            <button type="button" aria-label="Info" onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)} className="text-slate-400 hover:text-teal-600 focus:outline-none">
-                <Info className="w-3 h-3" />
+        <span className="relative inline-flex ml-0.5" ref={ref}>
+            <button type="button" aria-label="Info" onClick={() => setShow(!show)} onMouseEnter={handleEnter} onMouseLeave={() => setShow(false)} className="text-slate-400 hover:text-teal-600 focus:outline-none">
+                <Info className="w-3.5 h-3.5" />
             </button>
             {show && (
-                <span className="absolute left-0 top-6 z-50 w-48 sm:w-56 p-2 text-[10px] font-medium text-slate-700 bg-white border border-slate-200 rounded-lg shadow-lg" role="tooltip">
+                <span className={`absolute z-[100] w-56 sm:w-64 p-2.5 text-[11px] font-medium text-slate-700 bg-white border border-slate-200 rounded-lg shadow-xl leading-relaxed ${pos === 'above' ? 'bottom-7 right-0' : 'top-7 left-0'}`} role="tooltip" style={{ pointerEvents: 'none' }}>
                     {text}
                 </span>
             )}
@@ -147,7 +160,10 @@ export const ImpactHeatmap = ({ cells, rows = ['Economic', 'Environmental', 'Str
 
     return (
         <div className="h-full flex flex-col p-3 sm:p-4 lg:p-6">
-            <h3 className="text-[10px] sm:text-[12px] font-bold text-slate-700 uppercase tracking-[0.2em] sm:tracking-[0.25em] mb-4 sm:mb-6 lg:mb-8">Impact Matrix</h3>
+            <div className="flex items-center gap-1 mb-4 sm:mb-6 lg:mb-8">
+                <h3 className="text-[10px] sm:text-[12px] font-bold text-slate-700 uppercase tracking-[0.2em] sm:tracking-[0.25em]">Impact Matrix</h3>
+                <MetricTooltip text="3x3 matrix scoring Economic, Environmental and Strategic dimensions across Upside (potential gain), Risk (downside exposure) and Feasibility (implementation ease). Green = strong (67–100), Yellow = moderate (34–66), Red = weak (0–33)." />
+            </div>
             <div className="flex-1 grid grid-cols-4 gap-x-2 gap-y-2 sm:gap-x-4 sm:gap-y-4 min-w-0">
                 {/* Header IPs */}
                 <div className="col-span-1"></div>
@@ -318,7 +334,7 @@ export const DeepMetricsPanel = ({ details, keyDrivers }) => {
                 <SectionHeader label="Carbon" color="text-emerald-700" borderColor="bg-emerald-400" />
                 <MetricBox label="CO₂ Reduction" value={details.carbon_reduction_tons} unit="tCO2e" color="text-emerald-600" tooltipText="Estimated carbon reduction from efficiency and targets. Proxy for directional comparison, not certified reporting." />
                 <MetricBox label="Cost/Ton CO₂" value={details.cost_per_ton_co2} unit="€" />
-                <MetricBox label="Carbon Intensity" value={details.carbon_intensity_kg_per_1k_revenue} unit="kg CO2e/€1k" tooltipText="Index: kg CO2e per €1,000 revenue. Derived from carbon reduction proxy and revenue; for comparison only." />
+                <MetricBox label="Carbon Intensity" value={details.carbon_intensity_kg_per_1k_revenue} unit="kg CO2e/€1k" tooltipText="Index: kg CO2e per €1,000 sales. Derived from carbon reduction proxy and sales; for comparison only." />
                 <MetricBox label="Net Zero" value={details.net_zero_progress} unit="%" />
 
                 {/* -- Efficiency (4 metrics) -- */}
@@ -344,24 +360,68 @@ export const DeepMetricsPanel = ({ details, keyDrivers }) => {
     );
 };
 
-export const NumericInput = ({ label, value, onChange, prefix = "", suffix = "", type = "number", compact = false, step }) => (
-    <div className="group w-full">
-        <label className={`block ${compact ? 'text-[9px] sm:text-[10px]' : 'text-[10px] sm:text-xs'} font-bold text-slate-600 uppercase tracking-[0.15em] mb-1 sm:mb-1.5 group-hover:text-teal-600 transition-colors`}>
-            {label}
-        </label>
-        <div className="relative">
-            {prefix && <span className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 text-slate-500 font-bold text-[10px] sm:text-[11px]">{prefix}</span>}
-            <input
-                type={type}
-                step={step}
-                value={type === "number" ? Math.round(value) : value}
-                onChange={(e) => onChange(type === "number" ? Math.round(parseFloat(e.target.value)) || 0 : e.target.value)}
-                className={`w-full rounded-lg min-h-[44px] sm:min-h-0 border ${compact ? 'py-2 sm:py-1.5' : 'py-2.5'} ${prefix ? 'pl-6 sm:pl-7' : 'pl-3'} pr-7 sm:pr-8 text-[11px] font-bold text-slate-800 outline-none transition-all bg-white border-slate-300 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 placeholder:text-slate-400`}
-            />
-            {suffix && <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 font-bold text-[11px]">{suffix}</span>}
+const formatThousands = (num) => {
+    if (num == null || isNaN(num)) return '';
+    return Math.round(num).toLocaleString('de-DE');
+};
+
+const parseThousands = (str) => {
+    if (!str) return 0;
+    const cleaned = str.replace(/\./g, '').replace(/,/g, '.');
+    return Math.round(parseFloat(cleaned)) || 0;
+};
+
+export const NumericInput = ({ label, value, onChange, prefix = "", suffix = "", type = "number", compact = false, step }) => {
+    const [focused, setFocused] = React.useState(false);
+    const [localVal, setLocalVal] = React.useState('');
+
+    const displayValue = focused ? localVal : (type === "number" ? formatThousands(value) : value);
+
+    const handleFocus = () => {
+        setFocused(true);
+        setLocalVal(type === "number" ? String(Math.round(value)) : value);
+    };
+
+    const handleBlur = () => {
+        setFocused(false);
+        if (type === "number") {
+            onChange(parseThousands(localVal));
+        }
+    };
+
+    const handleChange = (e) => {
+        if (focused) {
+            setLocalVal(e.target.value);
+            if (type === "number") {
+                const parsed = parseFloat(e.target.value);
+                if (!isNaN(parsed)) onChange(Math.round(parsed));
+            } else {
+                onChange(e.target.value);
+            }
+        }
+    };
+
+    return (
+        <div className="group w-full">
+            <label className={`block ${compact ? 'text-[9px] sm:text-[10px]' : 'text-[10px] sm:text-xs'} font-bold text-slate-600 uppercase tracking-[0.15em] mb-1 sm:mb-1.5 group-hover:text-teal-600 transition-colors`}>
+                {label}
+            </label>
+            <div className="relative">
+                {prefix && <span className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 text-slate-500 font-bold text-[10px] sm:text-[11px]">{prefix}</span>}
+                <input
+                    type={focused ? "number" : "text"}
+                    step={step}
+                    value={displayValue}
+                    onFocus={handleFocus}
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    className={`w-full rounded-lg min-h-[44px] sm:min-h-0 border ${compact ? 'py-2 sm:py-1.5' : 'py-2.5'} ${prefix ? 'pl-6 sm:pl-7' : 'pl-3'} pr-7 sm:pr-8 text-[11px] font-bold text-slate-800 outline-none transition-all bg-white border-slate-300 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 placeholder:text-slate-400`}
+                />
+                {suffix && <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 font-bold text-[11px]">{suffix}</span>}
+            </div>
         </div>
-    </div>
-);
+    );
+};
 
 export const ProjectionChart = ({ data, title, dataKeyA, dataKeyB, labelA = "Scenario A", labelB = "Scenario B", prefix = "", showLineA = true, showLineB = true, onToggleA, onToggleB }) => {
     if (!data || data.length === 0) return null;
@@ -473,7 +533,7 @@ export const MethodologyPanel = ({ isOpen, onClose }) => {
                 <ul className="list-disc list-inside space-y-2 text-sm text-slate-700 mb-6">
                     <li>Energy cost share default: 20% of OPEX</li>
                     <li>Electricity price default: €0.15/kWh</li>
-                    <li>Water intensity default: 1 L per €1 revenue (manufacturing baseline) unless otherwise specified</li>
+                    <li>Water intensity default: 1 L per €1 sales (manufacturing baseline) unless otherwise specified</li>
                     <li>Waste proxy and resource efficiency are indicative indices, not measured quantities</li>
                 </ul>
                 <p className="text-sm text-slate-600">

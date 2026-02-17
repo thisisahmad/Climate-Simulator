@@ -1,7 +1,7 @@
 /**
  * Yearly projections: Scenario A (Traditional) vs Scenario B (Sustainable).
  * Matches backend/sme_simulator.py _calculate_projections exactly.
- * METRICS_DOCUMENTATION.md §1 Revenue, §2 OPEX, §3 Profit.
+ * METRICS_DOCUMENTATION.md §1 Sales, §2 OPEX, §3 Profit.
  */
 
 /**

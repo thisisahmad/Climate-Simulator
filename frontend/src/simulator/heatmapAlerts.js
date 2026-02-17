@@ -121,7 +121,7 @@ export function generateAlerts(i, projections, econ, env, strat) {
   if (econ > 70 && i.sustainability_capex > i.initial_revenue * 0.5) {
     alerts.push({
       message:
-        "Execution Risk: High complexity and investment relative to current revenue.",
+        "Execution Risk: High complexity and investment relative to current sales.",
       severity: "medium",
     });
   }

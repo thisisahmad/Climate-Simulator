@@ -22,7 +22,7 @@ const DRIVER_KEYS = [
 ];
 const DRIVER_LABELS = {
   sustainability_capex: "Sustainability CAPEX",
-  revenue_growth_rate: "Revenue growth",
+  revenue_growth_rate: "Sales growth",
   energy_efficiency_pct: "Energy efficiency",
   reputation_uplift_pct: "Reputation uplift",
   green_market_access_pct: "Green market access",
